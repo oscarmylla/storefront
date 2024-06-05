@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[data-portal] [data-ui] {
+  opacity: 1 !important;
+}

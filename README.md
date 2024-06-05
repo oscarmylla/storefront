@@ -1,3 +1,7 @@
+# Headless Theme
+
+https://github.com/instantcommerce/shopify-headless-theme
+
 # A statically generated blog example using Next.js and Sanity
 
 ![Screenshot of Sanity Studio using Presentation Tool to do Visual Editing](https://github.com/sanity-io/next.js/assets/81981/59ecd9d6-7a78-41c6-95f7-275f66fe3c9d)

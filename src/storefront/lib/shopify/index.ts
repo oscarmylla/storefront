@@ -19,6 +19,7 @@ import {
 import { getMenuQuery } from './queries/menu';
 import { getPageQuery, getPagesQuery } from './queries/page';
 import {
+  getProductHandlesQuery,
   getProductQuery,
   getProductRecommendationsQuery,
   getProductsQuery
@@ -27,9 +28,11 @@ import {
   Cart,
   Collection,
   Connection,
+  ConnectionWithPageInfo,
   Image,
   Menu,
   Page,
+  PageInfo,
   Product,
   ShopifyAddToCartOperation,
   ShopifyCart,
@@ -43,6 +46,7 @@ import {
   ShopifyPageOperation,
   ShopifyPagesOperation,
   ShopifyProduct,
+  ShopifyProductHandlesOperation,
   ShopifyProductOperation,
   ShopifyProductRecommendationsOperation,
   ShopifyProductsOperation,
@@ -400,11 +404,13 @@ export async function getProductRecommendations(productId: string): Promise<Prod
 export async function getProducts({
   query,
   reverse,
-  sortKey
+  sortKey,
+  first
 }: {
   query?: string;
   reverse?: boolean;
   sortKey?: string;
+  first?: number;
 }): Promise<Product[]> {
   const res = await shopifyFetch<ShopifyProductsOperation>({
     query: getProductsQuery,
@@ -412,11 +418,34 @@ export async function getProducts({
     variables: {
       query,
       reverse,
-      sortKey
+      sortKey,
+      first
     }
   });
 
   return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
+}
+
+export async function getProductHandles({
+  first,
+  after,
+}: {
+  first?: number;
+  after?: string;
+}): Promise<{ products: Pick<Product, "handle">[], pageInfo: PageInfo }> {
+  const res = await shopifyFetch<ShopifyProductHandlesOperation>({
+    query: getProductHandlesQuery,
+    tags: [TAGS.products],
+    variables: {
+      first,
+      after
+    }
+  });
+
+  return {
+    products: removeEdgesAndNodes(res.body.data.products),
+    pageInfo: res.body.data.products.pageInfo
+  };
 }
 
 // This is called from `app/api/revalidate.ts` so providers can control revalidation logic.

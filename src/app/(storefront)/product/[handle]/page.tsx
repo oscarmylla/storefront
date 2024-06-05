@@ -8,11 +8,40 @@ import { ProductDescription } from "@/storefront/components/product/product-desc
 import { HIDDEN_PRODUCT_TAG } from "@/storefront/lib/constants";
 import {
   getProduct,
+  getProductHandles,
   getProductRecommendations,
+  getProducts,
 } from "@/storefront/lib/shopify";
-import { Image } from "@/storefront/lib/shopify/types";
+import { Image, Product } from "@/storefront/lib/shopify/types";
 import Link from "next/link";
 import { Suspense } from "react";
+
+async function getHandles() {
+  const handles: string[] = [];
+  let hasNextPage = true;
+  let cursor;
+
+  do {
+    const { products, pageInfo } = await getProductHandles({
+      after: cursor,
+    });
+
+    handles.push(...products.map((product) => product.handle));
+
+    hasNextPage = pageInfo.hasNextPage;
+    cursor = pageInfo.endCursor;
+  } while (hasNextPage);
+
+  return handles;
+}
+
+export async function generateStaticParams() {
+  const handles = await getHandles();
+
+  return handles
+    .filter((handle) => !handle.includes("-bundle"))
+    .map((handle) => ({ handle }));
+}
 
 export async function generateMetadata({
   params,

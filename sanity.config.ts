@@ -15,7 +15,7 @@ import { locate } from "@/sanity/plugins/locate";
 import { singletonPlugin } from "@/sanity/plugins/settings";
 import { assistWithPresets } from "@/sanity/plugins/assist";
 import { settings } from "@/sanity/schemas/singletons/settings";
-import { schemaTypes } from "@/sanity/schemas";
+import { schemaTypes } from "@/sanity/schemas/types";
 import { imageHotspotArrayPlugin } from "sanity-plugin-hotspot-array";
 import { customDocumentActions } from "@/sanity/plugins/custom-document-actions";
 import Navbar from "@/sanity/components/studio/navbar";
@@ -31,7 +31,22 @@ export default defineConfig({
   dataset,
 
   schema: {
-    types: schemaTypes
+    types: schemaTypes,
+
+    templates: (prev) => {
+      const categoryChild = {
+        id: 'category-child',
+        title: 'Category: Child',
+        schemaType: 'category',
+        parameters: [{ name: `parentId`, title: `Parent ID`, type: `string` }],
+        // This value will be passed-in from desk structure
+        value: ({ parentId }: { parentId: string }) => ({
+          parent: { _type: 'reference', _ref: parentId },
+        }),
+      }
+
+      return [...prev, categoryChild]
+    },
   },
 
   plugins: [

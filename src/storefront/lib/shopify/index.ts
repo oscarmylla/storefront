@@ -1,8 +1,10 @@
+"use server"
+
 import { HIDDEN_PRODUCT_TAG, SHOPIFY_GRAPHQL_API_ENDPOINT, TAGS } from '@/storefront/lib/constants';
 import { isShopifyError } from '@/storefront/lib/type-guards';
 import { ensureStartsWith } from '@/storefront/lib/utils';
 import { revalidateTag } from 'next/cache';
-import { headers } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import {
   addToCartMutation,
@@ -19,7 +21,6 @@ import {
 import { getMenuQuery } from './queries/menu';
 import { getPageQuery, getPagesQuery } from './queries/page';
 import {
-  getProductHandlesQuery,
   getProductQuery,
   getProductRecommendationsQuery,
   getProductsQuery
@@ -28,11 +29,9 @@ import {
   Cart,
   Collection,
   Connection,
-  ConnectionWithPageInfo,
   Image,
   Menu,
   Page,
-  PageInfo,
   Product,
   ShopifyAddToCartOperation,
   ShopifyCart,
@@ -46,7 +45,6 @@ import {
   ShopifyPageOperation,
   ShopifyPagesOperation,
   ShopifyProduct,
-  ShopifyProductHandlesOperation,
   ShopifyProductOperation,
   ShopifyProductRecommendationsOperation,
   ShopifyProductsOperation,
@@ -258,7 +256,11 @@ export async function updateCart(
   return reshapeCart(res.body.data.cartLinesUpdate.cart);
 }
 
-export async function getCart(cartId: string): Promise<Cart | undefined> {
+export async function getCart(): Promise<Cart | undefined> {
+  const cartId = cookies().get("cartId")?.value;
+
+  if (!cartId) return undefined;
+
   const res = await shopifyFetch<ShopifyCartOperation>({
     query: getCartQuery,
     variables: { cartId },
@@ -424,28 +426,6 @@ export async function getProducts({
   });
 
   return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
-}
-
-export async function getProductHandles({
-  first,
-  after,
-}: {
-  first?: number;
-  after?: string;
-}): Promise<{ products: Pick<Product, "handle">[], pageInfo: PageInfo }> {
-  const res = await shopifyFetch<ShopifyProductHandlesOperation>({
-    query: getProductHandlesQuery,
-    tags: [TAGS.products],
-    variables: {
-      first,
-      after
-    }
-  });
-
-  return {
-    products: removeEdgesAndNodes(res.body.data.products),
-    pageInfo: res.body.data.products.pageInfo
-  };
 }
 
 // This is called from `app/api/revalidate.ts` so providers can control revalidation logic.

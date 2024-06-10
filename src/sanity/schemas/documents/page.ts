@@ -1,6 +1,6 @@
 import { DocumentIcon } from '@sanity/icons'
 import { defineField } from 'sanity'
-import { validateSlug } from '@/sanity/utils'
+import { validateSlug } from '@/sanity/utils/validateSlug'
 import { GROUPS } from '@/sanity/constants'
 
 export const page = defineField({

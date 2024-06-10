@@ -95,13 +95,14 @@ import { colorTheme } from './documents/color-theme'
 import { page } from './documents/page'
 import { product } from './documents/product'
 import { productVariant } from './documents/product-variant'
+import { post } from './documents/post'
+import { author } from './documents/author'
+import { category } from './documents/category'
 
-const documents = [collection, colorTheme, page, product, productVariant, post, author]
+const documents = [collection, colorTheme, page, product, productVariant, post, author, category]
 
 import { home } from './singletons/home'
 import { settings } from './singletons/settings'
-import { post } from './documents/post'
-import { author } from './documents/author'
 
 const singletons = [home, settings]
 

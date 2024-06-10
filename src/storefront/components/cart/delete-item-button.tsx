@@ -2,7 +2,7 @@
 
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { removeItem } from "@/storefront/components/cart/actions";
+import { removeItem } from "@/storefront/actions/cart";
 import LoadingDots from "@/storefront/components/loading-dots";
 import type { CartItem } from "@/storefront/lib/shopify/types";
 import { useFormState, useFormStatus } from "react-dom";

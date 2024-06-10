@@ -4,18 +4,6 @@ export type Connection<T> = {
   edges: Array<Edge<T>>;
 };
 
-export type ConnectionWithPageInfo<T> = {
-  edges: Array<Edge<T>>;
-  pageInfo: PageInfo
-};
-
-export type PageInfo = {
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-  startCursor: string;
-  endCursor: string;
-};
-
 export type Edge<T> = {
   node: T;
 };
@@ -274,15 +262,5 @@ export type ShopifyProductsOperation = {
     reverse?: boolean;
     sortKey?: string;
     first?: number;
-  };
-};
-
-export type ShopifyProductHandlesOperation = {
-  data: {
-    products: ConnectionWithPageInfo<Pick<ShopifyProduct, "handle">>;
-  };
-  variables: {
-    first?: number;
-    after?: string;
   };
 };

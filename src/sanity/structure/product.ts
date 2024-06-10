@@ -1,6 +1,6 @@
 import { InfoOutlineIcon } from '@sanity/icons'
 import { ListItemBuilder } from 'sanity/structure'
-import { defineStructure } from '@/sanity/utils'
+import { defineStructure } from '@/sanity/utils/defineStructure'
 
 export const product = defineStructure<ListItemBuilder>((S) =>
   S.listItem()

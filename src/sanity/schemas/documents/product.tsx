@@ -3,7 +3,7 @@ import pluralize from "pluralize-esm";
 import ProductHiddenInput from "@/sanity/components/inputs/product-hidden";
 import ShopifyDocumentStatus from "@/sanity/components/media/shopify-document-status";
 import { defineField, defineType } from "sanity";
-import { getPriceRange } from "@/sanity/utils";
+import { getPriceRange } from "@/sanity/utils/getPriceRange";
 import { GROUPS } from "@/sanity/constants";
 
 export const product = defineType({
@@ -60,6 +60,11 @@ export const product = defineType({
       title: "SEO",
       type: "seo",
       group: "seo",
+    }),
+    defineField({
+      name: "category",
+      type: "reference",
+      to: [{ type: "category" }],
     }),
   ],
   orderings: [

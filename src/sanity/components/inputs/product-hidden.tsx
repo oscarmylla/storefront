@@ -1,7 +1,7 @@
 import { WarningOutlineIcon } from "@sanity/icons";
 import { StringFieldProps, useFormValue } from "sanity";
 import { Box, Card, Flex, Stack, Text } from "@sanity/ui";
-import { productUrl } from "@/sanity/utils";
+import { productUrl } from "@/sanity/utils/shopifyUrls";
 
 type Store = {
   id: number;

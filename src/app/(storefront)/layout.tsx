@@ -18,8 +18,11 @@ import type { SettingsQueryResult } from "@/sanity.types";
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { settingsQuery } from "@/sanity/lib/queries";
-import { resolveOpenGraphImage } from "@/sanity/lib/utils";
+import { resolveOpenGraphImage } from "@/sanity/utils/resolveOpenGraphImage";
 import Navbar from "@/storefront/components/layout/navbar";
+import { cn } from "@/storefront/lib/utils";
+
+import { GeistSans } from "geist/font/sans";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await sanityFetch<SettingsQueryResult>({
@@ -104,8 +107,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} bg-white text-black`}>
-      <body>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          GeistSans.variable
+        )}
+      >
         <section className="min-h-screen">
           {draftMode().isEnabled && <AlertBanner />}
           <Navbar />

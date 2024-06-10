@@ -5,6 +5,8 @@ import { home } from './home'
 import { page } from './page'
 import { product } from './product'
 import { settings } from './settings'
+import { category } from './category';
+import { categories } from './categories';
 
 /**
  * Structure overrides
@@ -36,6 +38,7 @@ const hiddenDocTypes = (listItem: ListItemBuilder) => {
     'product',
     'productVariant',
     'settings',
+    'category',
   ].includes(id)
 }
 
@@ -52,6 +55,9 @@ export const structure: StructureResolver = (S, context) =>
       colorTheme(S, context),
       S.divider(),
       settings(S, context),
+      S.divider(),
+      category(S, context),
+      categories(S, context),
       S.divider(),
       ...S.documentTypeListItems().filter(hiddenDocTypes),
     ])

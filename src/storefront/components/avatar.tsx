@@ -1,7 +1,7 @@
 import { Image } from "next-sanity/image";
 
 import type { Author } from "@/sanity.types";
-import { urlForImage } from "@/sanity/lib/utils";
+import { urlForImage } from "@/sanity/utils/urlForImage";
 
 interface Props {
   name: string;

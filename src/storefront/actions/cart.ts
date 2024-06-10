@@ -1,33 +1,30 @@
-'use server';
+"use server"
 
 import { TAGS } from '@/storefront/lib/constants';
 import { addToCart, createCart, getCart, removeFromCart, updateCart } from '@/storefront/lib/shopify';
 import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
+import { Cart } from '../lib/shopify/types';
 
-export async function addItem(prevState: any, selectedVariantId: string | undefined) {
-  let cartId = cookies().get('cartId')?.value;
-  let cart;
+export async function addItem(selectedVariantId: string | undefined, quantity: number = 1): Promise<Cart | null> {
+  let cart = await getCart()
 
-  if (cartId) {
-    cart = await getCart(cartId);
-  }
-
-  if (!cartId || !cart) {
+  if (!cart) {
     cart = await createCart();
-    cartId = cart.id;
-    cookies().set('cartId', cartId);
+    cookies().set('cartId', cart.id);
   }
 
   if (!selectedVariantId) {
-    return 'Missing product variant ID';
+    return cart;
   }
 
   try {
-    await addToCart(cartId, [{ merchandiseId: selectedVariantId, quantity: 1 }]);
+    cart = await addToCart(cart.id, [{ merchandiseId: selectedVariantId, quantity }]);
     revalidateTag(TAGS.cart);
+    return cart;
   } catch (e) {
-    return 'Error adding item to cart';
+    console.error('Error adding item to cart', e);
+    return cart;
   }
 }
 
@@ -47,29 +44,29 @@ export async function removeItem(prevState: any, lineId: string) {
 }
 
 export async function updateItemQuantity(
-  prevState: any,
   payload: {
     lineId: string;
     variantId: string;
     quantity: number;
   }
-) {
+): Promise<Cart | null> {
+  let cart: Cart | null = null;
   const cartId = cookies().get('cartId')?.value;
 
   if (!cartId) {
-    return 'Missing cart ID';
+    return cart;
   }
 
   const { lineId, variantId, quantity } = payload;
 
   try {
     if (quantity === 0) {
-      await removeFromCart(cartId, [lineId]);
+      cart = await removeFromCart(cartId, [lineId]);
       revalidateTag(TAGS.cart);
-      return;
+      return cart;
     }
 
-    await updateCart(cartId, [
+    cart = await updateCart(cartId, [
       {
         id: lineId,
         merchandiseId: variantId,
@@ -77,7 +74,9 @@ export async function updateItemQuantity(
       }
     ]);
     revalidateTag(TAGS.cart);
+    return cart;
   } catch (e) {
-    return 'Error updating item quantity';
+    console.error('Error updating item quantity', e);
+    return cart;
   }
 }

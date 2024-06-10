@@ -5,7 +5,7 @@ import type {
   DocumentLocationsState,
 } from "sanity/presentation";
 
-import { resolveHref } from "@/sanity/lib/utils";
+import { resolveHref } from "@/sanity/utils/resolveHref";
 
 const homeLocation = {
   title: "Home",
@@ -20,9 +20,9 @@ export const locate: DocumentLocationResolver = (params, context) => {
       { perspective: "previewDrafts" },
     ) as Observable<
       | {
-          slug: { current: string };
-          title: string | null;
-        }[]
+        slug: { current: string };
+        title: string | null;
+      }[]
       | null
     >;
     return doc$.pipe(
@@ -32,14 +32,14 @@ export const locate: DocumentLocationResolver = (params, context) => {
           tone: "caution",
           locations: docs?.length
             ? [
-                homeLocation,
-                ...docs
-                  .map((doc) => ({
-                    title: doc?.title || "Untitled",
-                    href: resolveHref("post", doc?.slug?.current)!,
-                  }))
-                  .filter((doc) => doc.href !== undefined),
-              ]
+              homeLocation,
+              ...docs
+                .map((doc) => ({
+                  title: doc?.title || "Untitled",
+                  href: resolveHref("post", doc?.slug?.current)!,
+                }))
+                .filter((doc) => doc.href !== undefined),
+            ]
             : [],
         } satisfies DocumentLocationsState;
       }),
@@ -53,10 +53,10 @@ export const locate: DocumentLocationResolver = (params, context) => {
       { perspective: "previewDrafts" },
     ) as Observable<
       | {
-          _type: string;
-          slug: { current: string };
-          title?: string | null;
-        }[]
+        _type: string;
+        slug: { current: string };
+        title?: string | null;
+      }[]
       | null
     >;
     return doc$.pipe(
@@ -67,17 +67,17 @@ export const locate: DocumentLocationResolver = (params, context) => {
             return {
               locations: docs?.length
                 ? [
-                    homeLocation,
-                    ...docs
-                      .map((doc) => {
-                        const href = resolveHref(doc._type, doc?.slug?.current);
-                        return {
-                          title: doc?.title || "Untitled",
-                          href: href!,
-                        };
-                      })
-                      .filter((doc) => doc.href !== undefined),
-                  ]
+                  homeLocation,
+                  ...docs
+                    .map((doc) => {
+                      const href = resolveHref(doc._type, doc?.slug?.current);
+                      return {
+                        title: doc?.title || "Untitled",
+                        href: href!,
+                      };
+                    })
+                    .filter((doc) => doc.href !== undefined),
+                ]
                 : [],
             } satisfies DocumentLocationsState;
           default:

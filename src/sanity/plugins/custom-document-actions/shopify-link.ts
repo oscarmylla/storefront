@@ -1,5 +1,5 @@
 import { EarthGlobeIcon } from '@sanity/icons'
-import { collectionUrl, productUrl, productVariantUrl } from '@/sanity/utils'
+import { collectionUrl, productUrl, productVariantUrl } from '@/sanity/utils/shopifyUrls'
 import { type DocumentActionDescription } from 'sanity'
 import type { ShopifyDocument, ShopifyDocumentActionProps } from './types'
 

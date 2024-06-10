@@ -8,40 +8,11 @@ import { ProductDescription } from "@/storefront/components/product/product-desc
 import { HIDDEN_PRODUCT_TAG } from "@/storefront/lib/constants";
 import {
   getProduct,
-  getProductHandles,
   getProductRecommendations,
-  getProducts,
 } from "@/storefront/lib/shopify";
-import { Image, Product } from "@/storefront/lib/shopify/types";
+import { Image } from "@/storefront/lib/shopify/types";
 import Link from "next/link";
 import { Suspense } from "react";
-
-async function getHandles() {
-  const handles: string[] = [];
-  let hasNextPage = true;
-  let cursor;
-
-  do {
-    const { products, pageInfo } = await getProductHandles({
-      after: cursor,
-    });
-
-    handles.push(...products.map((product) => product.handle));
-
-    hasNextPage = pageInfo.hasNextPage;
-    cursor = pageInfo.endCursor;
-  } while (hasNextPage);
-
-  return handles;
-}
-
-export async function generateStaticParams() {
-  const handles = await getHandles();
-
-  return handles
-    .filter((handle) => !handle.includes("-bundle"))
-    .map((handle) => ({ handle }));
-}
 
 export async function generateMetadata({
   params,
@@ -116,7 +87,7 @@ export default async function ProductPage({
         }}
       />
       <div className="mx-auto max-w-screen-2xl px-4">
-        <div className="flex flex-col rounded-lg border border-neutral-200 bg-white p-8 md:p-12 lg:flex-row lg:gap-8 dark:border-neutral-800 dark:bg-black">
+        <div className="flex flex-col rounded-lg border border-neutral-200 bg-white p-8 md:p-12 lg:flex-row lg:gap-8 ">
           <div className="h-full w-full basis-full lg:basis-4/6">
             <Suspense
               fallback={

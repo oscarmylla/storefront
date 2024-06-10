@@ -26,3 +26,26 @@ export const postQuery = groq`*[_type == "post" && slug.current == $slug] [0] {
   content,
   ${postFields}
 }`;
+
+export const categoriesQuery = groq`*[_type == "category" && !defined(parent)]{
+    ...,
+  "category_children": *[_type=="category" && parent._ref == ^._id]{
+    ...,
+    "category_children": *[_type=="category" && parent._ref == ^._id]
+  }
+}`;
+
+export const categoryQuery = groq`*[_type == "category" && slug.current == $slug][0]{
+    ...,
+    "product_count": count(*[_type=="product" && references(^._id)]),
+    "category_children": *[_type=="category" && parent._ref == ^._id]{
+    ...,
+    "product_count": count(*[_type=="product" && references(^._id)]),
+    "category_children": *[_type=="category" && parent._ref == ^._id]{
+      ...,
+      "product_count": count(*[_type=="product" && references(^._id)])
+    }
+  }
+}`;
+
+export const categoryProductsQuery = groq`*[_type == "product" && category._ref in *[_type=="category" && slug.current in $slugs]._id ]`;

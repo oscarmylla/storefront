@@ -1,9 +1,9 @@
-import { AddToCart } from "@/storefront/components/cart/add-to-cart";
 import Price from "@/storefront/components/price";
 import Prose from "@/storefront/components/prose";
 import { Product } from "@/storefront/lib/shopify/types";
 import { Suspense } from "react";
 import { VariantSelector } from "./variant-selector";
+import { AddToCart } from "../common/add-to-cart";
 
 export function ProductDescription({ product }: { product: Product }) {
   return (
@@ -26,7 +26,7 @@ export function ProductDescription({ product }: { product: Product }) {
 
       {product.descriptionHtml ? (
         <Prose
-          className="mb-6 text-sm leading-tight dark:text-white/[60%]"
+          className="mb-6 text-sm leading-tight"
           html={product.descriptionHtml}
         />
       ) : null}

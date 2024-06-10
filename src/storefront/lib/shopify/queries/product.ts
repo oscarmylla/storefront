@@ -22,24 +22,6 @@ export const getProductsQuery = /* GraphQL */ `
   ${productFragment}
 `;
 
-export const getProductHandlesQuery = /* GraphQL */ `
-  query getProductHandles($first: Int = 100, $after: String) {
-    products(first: $first, after: $after) {
-      edges {
-        node {
-          handle
-        }
-      }
-      pageInfo {
-        endCursor
-        hasNextPage
-        hasPreviousPage
-        startCursor
-      }
-    }
-  }
-`;
-
 export const getProductRecommendationsQuery = /* GraphQL */ `
   query getProductRecommendations($productId: ID!) {
     productRecommendations(productId: $productId) {

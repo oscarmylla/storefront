@@ -650,6 +650,28 @@ export type Product = {
   body?: PortableText;
   store?: ShopifyProduct;
   seo?: Seo;
+  category?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
+};
+
+export type Category = {
+  _id: string;
+  _type: "category";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  parent?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
+  slug?: Slug;
 };
 
 export type ShopifyProduct = {
@@ -1281,6 +1303,106 @@ export type PostQueryResult = {
     } | null;
   } | null;
 } | null;
+// Variable: categoriesQuery
+// Query: *[_type == "category" && !defined(parent)]{    ...,  "category_children": *[_type=="category" && parent._ref == ^._id]{    ...,    "category_children": *[_type=="category" && parent._ref == ^._id]  }}
+export type CategoriesQueryResult = Array<{
+  _id: string;
+  _type: "category";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  parent?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
+  slug?: Slug;
+  category_children: Array<{
+    _id: string;
+    _type: "category";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    title?: string;
+    parent?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "category";
+    };
+    slug?: Slug;
+    category_children: Array<{
+      _id: string;
+      _type: "category";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      title?: string;
+      parent?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "category";
+      };
+      slug?: Slug;
+    }>;
+  }>;
+}>;
+// Variable: categoryQuery
+// Query: *[_type == "category" && slug.current == $slug][0]{    ...,    "product_count": count(*[_type=="product" && references(^._id)]),    "category_children": *[_type=="category" && parent._ref == ^._id]{    ...,    "product_count": count(*[_type=="product" && references(^._id)]),    "category_children": *[_type=="category" && parent._ref == ^._id]{      ...,      "product_count": count(*[_type=="product" && references(^._id)])    }  }}
+export type CategoryQueryResult = {
+  _id: string;
+  _type: "category";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  parent?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
+  slug?: Slug;
+  product_count: number;
+  category_children: Array<{
+    _id: string;
+    _type: "category";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    title?: string;
+    parent?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "category";
+    };
+    slug?: Slug;
+    product_count: number;
+    category_children: Array<{
+      _id: string;
+      _type: "category";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      title?: string;
+      parent?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "category";
+      };
+      slug?: Slug;
+      product_count: number;
+    }>;
+  }>;
+} | null;
+// Variable: categoryProductsQuery
+// Query: *[_type == "product" && category._ref in *[_type=="category" && slug.current in $slugs]._id ]
+export type CategoryProductsQueryResult = Array<never>;
 // Source: ./src/app/(storefront)/posts/[slug]/page.tsx
 // Variable: postSlugs
 // Query: *[_type == "post"]{slug}

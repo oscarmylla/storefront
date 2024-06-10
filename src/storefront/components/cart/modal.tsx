@@ -24,18 +24,18 @@ export default function CartModal({ cart }: { cart: Cart | undefined }) {
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);
 
-  useEffect(() => {
-    // Open cart modal when quantity changes.
-    if (cart?.totalQuantity !== quantityRef.current) {
-      // But only if it's not already open (quantity also changes when editing items in cart).
-      if (!isOpen) {
-        setIsOpen(true);
-      }
+  // useEffect(() => {
+  //   // Open cart modal when quantity changes.
+  //   if (cart?.totalQuantity !== quantityRef.current) {
+  //     // But only if it's not already open (quantity also changes when editing items in cart).
+  //     if (!isOpen) {
+  //       setIsOpen(true);
+  //     }
 
-      // Always update the quantity reference
-      quantityRef.current = cart?.totalQuantity;
-    }
-  }, [isOpen, cart?.totalQuantity, quantityRef]);
+  //     // Always update the quantity reference
+  //     quantityRef.current = cart?.totalQuantity;
+  //   }
+  // }, [isOpen, cart?.totalQuantity, quantityRef]);
 
   return (
     <>
@@ -64,7 +64,7 @@ export default function CartModal({ cart }: { cart: Cart | undefined }) {
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full"
           >
-            <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l border-neutral-200 bg-white/80 p-6 text-black backdrop-blur-xl md:w-[390px] dark:border-neutral-700 dark:bg-black/80 dark:text-white">
+            <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l border-neutral-200 bg-white/80 p-6 text-black backdrop-blur-xl md:w-[390px] dark:border-neutral-700 dark:bg-black/80 ">
               <div className="flex items-center justify-between">
                 <p className="text-lg font-semibold">My Cart</p>
 
@@ -173,7 +173,7 @@ export default function CartModal({ cart }: { cart: Cart | undefined }) {
                     <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 dark:border-neutral-700">
                       <p>Taxes</p>
                       <Price
-                        className="text-right text-base text-black dark:text-white"
+                        className="text-right text-base text-black "
                         amount={cart.cost.totalTaxAmount.amount}
                         currencyCode={cart.cost.totalTaxAmount.currencyCode}
                       />
@@ -185,7 +185,7 @@ export default function CartModal({ cart }: { cart: Cart | undefined }) {
                     <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 pt-1 dark:border-neutral-700">
                       <p>Total</p>
                       <Price
-                        className="text-right text-base text-black dark:text-white"
+                        className="text-right text-base text-black "
                         amount={cart.cost.totalAmount.amount}
                         currencyCode={cart.cost.totalAmount.currencyCode}
                       />

@@ -656,6 +656,13 @@ export type Product = {
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "category";
   };
+  categoryPath?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
+  }>;
 };
 
 export type Category = {
@@ -665,13 +672,20 @@ export type Category = {
   _updatedAt: string;
   _rev: string;
   title?: string;
+  slug?: Slug;
   parent?: {
     _ref: string;
     _type: "reference";
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "category";
   };
-  slug?: Slug;
+  path?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
+  }>;
 };
 
 export type ShopifyProduct = {
@@ -1304,7 +1318,7 @@ export type PostQueryResult = {
   } | null;
 } | null;
 // Variable: categoriesQuery
-// Query: *[_type == "category" && !defined(parent)]{    ...,  "category_children": *[_type=="category" && parent._ref == ^._id]{    ...,    "category_children": *[_type=="category" && parent._ref == ^._id]  }}
+// Query: *[_type == "category" && !defined(parent)]{    ...,    "product_count": count(*[_type=="product" && references(^._id)])}
 export type CategoriesQueryResult = Array<{
   _id: string;
   _type: "category";
@@ -1312,60 +1326,45 @@ export type CategoriesQueryResult = Array<{
   _updatedAt: string;
   _rev: string;
   title?: string;
+  slug?: Slug;
   parent?: {
     _ref: string;
     _type: "reference";
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "category";
   };
-  slug?: Slug;
-  category_children: Array<{
-    _id: string;
-    _type: "category";
-    _createdAt: string;
-    _updatedAt: string;
-    _rev: string;
-    title?: string;
-    parent?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "category";
-    };
-    slug?: Slug;
-    category_children: Array<{
-      _id: string;
-      _type: "category";
-      _createdAt: string;
-      _updatedAt: string;
-      _rev: string;
-      title?: string;
-      parent?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "category";
-      };
-      slug?: Slug;
-    }>;
+  path?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
   }>;
+  product_count: number;
 }>;
-// Variable: categoryQuery
-// Query: *[_type == "category" && slug.current == $slug][0]{    ...,    "product_count": count(*[_type=="product" && references(^._id)]),    "category_children": *[_type=="category" && parent._ref == ^._id]{    ...,    "product_count": count(*[_type=="product" && references(^._id)]),    "category_children": *[_type=="category" && parent._ref == ^._id]{      ...,      "product_count": count(*[_type=="product" && references(^._id)])    }  }}
-export type CategoryQueryResult = {
+// Variable: categoriesByPathQuery
+// Query: *[_type == "category" && slug.current in $slugs]{    ...,    "product_count": count(*[_type == "product" && references(^._id)]),    "category_children": *[_type=="category" && parent._ref == ^._id]{      ...,      "product_count": count(*[_type == "product" && references(^._id)])    }}
+export type CategoriesByPathQueryResult = Array<{
   _id: string;
   _type: "category";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
   title?: string;
+  slug?: Slug;
   parent?: {
     _ref: string;
     _type: "reference";
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "category";
   };
-  slug?: Slug;
+  path?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
+  }>;
   product_count: number;
   category_children: Array<{
     _id: string;
@@ -1374,35 +1373,68 @@ export type CategoryQueryResult = {
     _updatedAt: string;
     _rev: string;
     title?: string;
+    slug?: Slug;
     parent?: {
       _ref: string;
       _type: "reference";
       _weak?: boolean;
       [internalGroqTypeReferenceTo]?: "category";
     };
-    slug?: Slug;
-    product_count: number;
-    category_children: Array<{
-      _id: string;
-      _type: "category";
-      _createdAt: string;
-      _updatedAt: string;
-      _rev: string;
-      title?: string;
-      parent?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "category";
-      };
-      slug?: Slug;
-      product_count: number;
+    path?: Array<{
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      _key: string;
+      [internalGroqTypeReferenceTo]?: "category";
     }>;
+    product_count: number;
   }>;
-} | null;
+}>;
 // Variable: categoryProductsQuery
-// Query: *[_type == "product" && category._ref in *[_type=="category" && slug.current in $slugs]._id ]
-export type CategoryProductsQueryResult = Array<never>;
+// Query: *[_type == "product" && references($id)]
+export type CategoryProductsQueryResult = Array<{
+  _id: string;
+  _type: "product";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  hidden?: string;
+  titleProxy?: ProxyString;
+  slugProxy?: ProxyString;
+  colorTheme?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "colorTheme";
+  };
+  body?: PortableText;
+  store?: ShopifyProduct;
+  seo?: Seo;
+  category?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
+  categoryPath?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
+  }>;
+}>;
+// Variable: categoryPathQuery
+// Query: *[_type == "category" && _id == $id][0]{ path }
+export type CategoryPathQueryResult = {
+  path: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
+  }> | null;
+} | null;
 // Source: ./src/app/(storefront)/posts/[slug]/page.tsx
 // Variable: postSlugs
 // Query: *[_type == "post"]{slug}

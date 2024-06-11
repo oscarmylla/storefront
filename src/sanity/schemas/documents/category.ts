@@ -9,15 +9,6 @@ export const category = defineType({
    fields: [
       defineField({ name: 'title', type: 'string' }),
       defineField({
-         name: 'parent',
-         type: 'reference',
-         to: [{ type: 'category' }],
-         // This ensures we cannot select other "children"
-         // options: {
-         //    filter: '!defined(parent)',
-         // },
-      }),
-      defineField({
          name: "slug",
          title: "Slug",
          type: "slug",
@@ -29,16 +20,42 @@ export const category = defineType({
          },
          validation: (rule) => rule.required(),
       }),
+      defineField({
+         name: 'parent',
+         type: 'reference',
+         to: [{ type: 'category' }],
+         // This ensures we cannot select other "children"
+         // options: {
+         //    filter: '!defined(parent)',
+         // },
+      }),
+      defineField({
+         name: 'path',
+         title: 'Path',
+         type: 'array',
+         of: [{ type: 'reference', to: [{ type: 'category' }] }],
+         description: 'This array contains references to all parent categories, maintaining order from the root.',
+         readOnly: true,
+      }),
    ],
 
    preview: {
       select: {
          title: 'title',
-         subtitle: 'parent.title',
+         path0: 'path.0.title',
+         path1: 'path.1.title',
+         path2: 'path.2.title',
+         path3: 'path.3.title',
       },
-      prepare: ({ title, subtitle }) => ({
-         title,
-         subtitle: subtitle ? `– ${subtitle}` : ``,
-      }),
+      prepare: ({ title, path0, path1, path2, path3 }) => {
+         const paths = [path0, path1, path2].filter(Boolean)
+         const subtitle = paths.length > 0 ? paths.join(' > ') : ''
+         const hasMoreAuthors = Boolean(path3)
+
+         return ({
+            title,
+            subtitle: hasMoreAuthors ? `${subtitle}...` : subtitle
+         })
+      },
    },
 })

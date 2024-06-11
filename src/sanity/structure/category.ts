@@ -47,6 +47,7 @@ export const category = defineStructure<ListItemBuilder>((S, context) =>
             .title('Category')
             .schemaType('category')
             .filter(`_type == "category" && !defined(parent) && !(_id in path("drafts.**"))`)
+            .apiVersion(apiVersion)
             .child((id) => child(id, S, context))
       )
 )

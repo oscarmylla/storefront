@@ -1,75 +1,40 @@
-import { getCollection, getCollectionProducts } from "@/storefront/lib/shopify";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-
-import Grid from "@/storefront/components/grid";
-import ProductGridItems from "@/storefront/components/layout/product-grid-items";
-import { defaultSort, sorting } from "@/storefront/lib/constants";
-import { getCategoryProducts, getCategoryTree } from "@/sanity/lib";
-import { Category, CategoryQueryResult } from "@/sanity.types";
+import { getCategoryProducts, getCategoriesByPath } from "@/sanity/lib";
+import { CategoriesByPathQueryResult, Category } from "@/sanity.types";
 import Link from "next/link";
 import { Button } from "@/storefront/components/ui/button";
 import Image from "next/image";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/storefront/components/ui/breadcrumb";
+import React from "react";
 
 type CategoryWithChildren = Category & {
-  category_children?: CategoryWithChildren[];
   product_count: number;
+  category_children?: (Category & { product_count: number })[];
 };
-
-function getCurrentCategory(
-  categoryTree: CategoryQueryResult,
-  pathSlugs: string[]
-) {
-  let currentCategory: CategoryWithChildren | CategoryQueryResult =
-    categoryTree;
-
-  for (let slug of pathSlugs) {
-    if (!currentCategory) return null;
-
-    let foundChild: CategoryWithChildren | undefined =
-      currentCategory.category_children?.find(
-        (child) => child.slug?.current === slug
-      );
-
-    if (!foundChild) {
-      return null;
-    }
-
-    currentCategory = foundChild;
-  }
-
-  return currentCategory;
-}
-
-function getDescendentSlugs(category: CategoryWithChildren): string[] {
-  let slugs: string[] = category.slug?.current ? [category.slug?.current] : [];
-
-  if (category.category_children) {
-    for (let child of category.category_children) {
-      slugs.push(...getDescendentSlugs(child));
-    }
-  }
-
-  return slugs;
-}
 
 export async function generateMetadata({
   params,
 }: {
   params: { category: string[] };
 }): Promise<Metadata> {
-  const tree = await getCategoryTree({
-    slug: params.category[0],
+  const categories = await getCategoriesByPath({
+    slugs: params.category,
   });
 
-  if (!tree) return notFound();
+  if (!categories) return notFound();
 
-  const category = getCurrentCategory(tree, params.category.slice(1));
-
-  if (!category) return notFound();
+  const current = categories[categories.length - 1];
 
   return {
-    title: category.title,
+    title: current.title,
   };
 }
 
@@ -80,23 +45,46 @@ export default async function CategoryPage({
   params: { category: string[] };
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-  const tree = await getCategoryTree({
-    slug: params.category[0],
+  const categories = await getCategoriesByPath({
+    slugs: params.category,
   });
 
-  if (!tree) return notFound();
+  if (!categories) return notFound();
 
-  const category = getCurrentCategory(tree, params.category.slice(1));
-
-  if (!category) return notFound();
-
-  const slugs = getDescendentSlugs(category);
+  const category = categories[categories.length - 1];
 
   return (
     <section>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/categories">Alla kategorier</BreadcrumbLink>
+          </BreadcrumbItem>
+          {categories.slice(0, categories.length - 1).map((category, index) => (
+            <React.Fragment key={category._id}>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink
+                  href={`/categories/${params.category.slice(0, index + 1).join("/")}`}
+                >
+                  {category.title}
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            </React.Fragment>
+          ))}
+          <BreadcrumbSeparator />
+          <BreadcrumbPage className="max-w-20 truncate md:max-w-none">
+            {categories[categories.length - 1].title}
+          </BreadcrumbPage>
+        </BreadcrumbList>
+      </Breadcrumb>
       <h1 className="text-3xl">{category.title}</h1>
-      <CategorySection category={tree} params={params.category} />
-      <ProductGrid slugs={slugs} />
+
+      <CategoryNavigationSection
+        categories={categories}
+        params={params.category}
+      />
+      <ProductGrid id={category._id} />
       {/* {products.length === 0 ? (
         <p className="py-3 text-lg">{`No products found in this collection`}</p>
       ) : (
@@ -108,94 +96,86 @@ export default async function CategoryPage({
   );
 }
 
-function getBranchProductCount(category: CategoryWithChildren): number {
-  let count = category.product_count;
-
-  if (category.category_children) {
-    for (let child of category.category_children) {
-      count += getBranchProductCount(child);
-    }
-  }
-
-  return count;
+function CategoryNavigationSection({
+  categories,
+  params,
+}: {
+  categories: CategoriesByPathQueryResult;
+  params: string[];
+}) {
+  return (
+    <div>
+      {categories.map((category, index) => (
+        <CategoryNavigationItem
+          key={category._id}
+          category={category}
+          params={params}
+          depth={index + 1}
+        />
+      ))}
+    </div>
+  );
 }
 
-function CategorySection({
+function CategoryNavigationItem({
   category,
   params,
-  depth = 0,
+  depth,
 }: {
   category: CategoryWithChildren;
   params: string[];
-  depth?: number;
+  depth: number;
 }) {
-  if (!category || !category.category_children) return null;
-
-  const href = `/categories/${params.slice(0, depth + 1).join("/")}`;
-
-  const selectedChild = category.category_children?.find(
-    (child) => child.slug?.current === params[depth + 1]
-  );
-
   return (
-    <>
-      <div>
-        <div className="flex">
-          <Button key={category._id} asChild>
-            <Link href={href}>Alla {getBranchProductCount(category)}</Link>
-          </Button>
-          {category.category_children?.map((category) => {
-            const isCurrent = category.slug?.current === params[depth + 1];
-            const href = `/categories/${params.slice(0, depth + 1).join("/")}/${category.slug?.current}`;
+    <div>
+      {category.category_children?.map((child) => {
+        const isCurrent = child.slug?.current === params[depth];
+        const href = `/categories/${params.slice(0, depth).join("/")}/${child.slug?.current}`;
 
-            return (
-              <Button
-                key={category._id}
-                variant={isCurrent ? "default" : "outline"}
-                asChild
-              >
-                <Link href={href}>
-                  {category.title} {getBranchProductCount(category)}
-                </Link>
-              </Button>
-            );
-          })}
-        </div>
-      </div>
-      {selectedChild && (
-        <CategorySection
-          category={selectedChild}
-          params={params}
-          depth={depth + 1}
-        />
-      )}
-    </>
+        return (
+          <Button
+            key={child._id}
+            variant={isCurrent ? "default" : "outline"}
+            asChild
+          >
+            <Link href={href}>
+              {child.title} {child.product_count}
+            </Link>
+          </Button>
+        );
+      })}
+    </div>
   );
 }
 
-async function ProductGrid({ slugs }: { slugs: string[] }) {
-  const products = await getCategoryProducts({ slugs });
+async function ProductGrid({ id }: { id: string }) {
+  const products = await getCategoryProducts({ id });
+
   return (
     <div className="grid lg:grid-cols-4">
       {products.map((product) => {
         const { store } = product;
         if (!store) return null;
 
-        const { title, descriptionHtml, previewImageUrl } = store;
+        const { title, descriptionHtml, previewImageUrl, slug } = store;
+
+        if (!slug?.current) return null;
 
         return (
           <div key={product._id}>
-            <div className="aspect-square relative">
-              {previewImageUrl ? (
-                <Image
-                  src={previewImageUrl}
-                  alt={title ?? "Product image"}
-                  fill
-                  className="object-cover"
-                />
-              ) : null}
-            </div>
-            <h2>{title}</h2>
+            <Link href={`/products/${slug?.current}`}>
+              <div className="aspect-square relative">
+                {previewImageUrl ? (
+                  <Image
+                    src={previewImageUrl}
+                    alt={title ?? "Product image"}
+                    fill
+                    className="object-cover"
+                  />
+                ) : null}
+              </div>
+              <h2>{title}</h2>
+            </Link>
           </div>
         );
       })}

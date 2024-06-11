@@ -1,6 +1,7 @@
 import { InfoOutlineIcon } from '@sanity/icons'
 import { ListItemBuilder } from 'sanity/structure'
 import { defineStructure } from '@/sanity/utils/defineStructure'
+import { apiVersion } from '../lib/api'
 
 export const product = defineStructure<ListItemBuilder>((S) =>
   S.listItem()
@@ -31,12 +32,8 @@ export const product = defineStructure<ListItemBuilder>((S) =>
                   S.documentList()
                     .title('Variants')
                     .schemaType('productVariant')
-                    .filter(
-                      `
-                      _type == "productVariant"
-                      && store.productId == $productId
-                    `
-                    )
+                    .filter(`_type == "productVariant" && store.productId == $productId`)
+                    .apiVersion(apiVersion)
                     .params({
                       productId: Number(id.replace('shopifyProduct-', '')),
                     })

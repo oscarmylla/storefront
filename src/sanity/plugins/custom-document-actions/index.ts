@@ -8,6 +8,8 @@ import { ShopifyDelete } from './shopify-delete'
 import { shopifyLink } from './shopify-link'
 
 import { LOCKED_DOCUMENT_TYPES, SHOPIFY_DOCUMENT_TYPES } from '../../constants'
+import { CategoryPublish } from './category-publish'
+import { ProductPublish } from './product-publish'
 
 export const resolveDocumentActions: DocumentActionsResolver = (prev, { schemaType }) => {
   if (LOCKED_DOCUMENT_TYPES.includes(schemaType)) {
@@ -25,10 +27,28 @@ export const resolveDocumentActions: DocumentActionsResolver = (prev, { schemaTy
         previousAction.action === 'discardChanges'
     )
 
-    return [
+    const actions = [
       ...prev,
       ShopifyDelete as DocumentActionComponent,
       shopifyLink as DocumentActionComponent,
+    ]
+
+    if (schemaType === 'product') {
+      return [
+        ProductPublish as DocumentActionComponent,
+        ...actions.filter((previousAction: DocumentActionComponent) => previousAction.action === 'publish')
+      ]
+    }
+
+    return actions
+  }
+
+  if (schemaType === 'category') {
+    prev = prev.filter((previousAction: DocumentActionComponent) => previousAction.action === 'publish')
+
+    return [
+      CategoryPublish as DocumentActionComponent,
+      ...prev,
     ]
   }
 

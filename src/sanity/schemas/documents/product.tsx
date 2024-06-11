@@ -66,6 +66,15 @@ export const product = defineType({
       type: "reference",
       to: [{ type: "category" }],
     }),
+    defineField({
+      name: "categoryPath",
+      title: "Path",
+      type: "array",
+      of: [{ type: "reference", to: [{ type: "category" }] }],
+      description:
+        "This array contains references to all parent categories, maintaining order from the root.",
+      readOnly: true,
+    }),
   ],
   orderings: [
     {

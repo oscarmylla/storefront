@@ -1,4 +1,5 @@
 import productFragment from '../fragments/product';
+import variantFragment from '../fragments/variant';
 
 export const getProductQuery = /* GraphQL */ `
   query getProduct($handle: String!) {
@@ -7,6 +8,23 @@ export const getProductQuery = /* GraphQL */ `
     }
   }
   ${productFragment}
+`;
+
+export const getProductAvailabilityQuery = /* GraphQL */ `
+  query getProduct($handle: String!) {
+    product(handle: $handle){
+      availableForSale
+      totalInventory
+      variants(first: 10) {
+        edges {
+          node {
+            ...variant
+          }
+        }
+      }
+    }
+  }
+  ${variantFragment}
 `;
 
 export const getProductsQuery = /* GraphQL */ `

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useClient } from 'sanity'
+import { ActionComponent, useClient } from 'sanity'
 import { useDocumentOperation } from 'sanity'
 import { apiVersion } from '../../lib/api'
 import { categoryPathQuery } from '../../lib/queries'

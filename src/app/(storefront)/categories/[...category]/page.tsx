@@ -1,24 +1,13 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getCategoryProducts, getCategoriesByPath } from "@/sanity/lib";
-import { CategoriesByPathQueryResult, Category } from "@/sanity.types";
-import Link from "next/link";
-import { Button } from "@/storefront/components/ui/button";
-import Image from "next/image";
+import { getCategoriesByPath } from "@/sanity/lib";
+import React, { Suspense } from "react";
+import { CategoryBreadcrumb } from "@/storefront/components/category/breadcrumb";
+import { CategoryNavigation } from "@/storefront/components/category/navigation";
 import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/storefront/components/ui/breadcrumb";
-import React from "react";
-
-type CategoryWithChildren = Category & {
-  product_count: number;
-  category_children?: (Category & { product_count: number })[];
-};
+  CategoryProducts,
+  CategoryProductsSkeleton,
+} from "@/storefront/components/category/products";
 
 export async function generateMetadata({
   params,
@@ -53,132 +42,20 @@ export default async function CategoryPage({
 
   const category = categories[categories.length - 1];
 
-  return (
-    <section>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/categories">Alla kategorier</BreadcrumbLink>
-          </BreadcrumbItem>
-          {categories.slice(0, categories.length - 1).map((category, index) => (
-            <React.Fragment key={category._id}>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbLink
-                  href={`/categories/${params.category.slice(0, index + 1).join("/")}`}
-                >
-                  {category.title}
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            </React.Fragment>
-          ))}
-          <BreadcrumbSeparator />
-          <BreadcrumbPage className="max-w-20 truncate md:max-w-none">
-            {categories[categories.length - 1].title}
-          </BreadcrumbPage>
-        </BreadcrumbList>
-      </Breadcrumb>
-      <h1 className="text-3xl">{category.title}</h1>
+  const rootCategory = categories[0];
 
-      <CategoryNavigationSection
-        categories={categories}
-        params={params.category}
-      />
-      <ProductGrid id={category._id} />
-      {/* {products.length === 0 ? (
-        <p className="py-3 text-lg">{`No products found in this collection`}</p>
-      ) : (
-        <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          <ProductGridItems products={products} />
-        </Grid>
-      )} */}
+  return (
+    <section className="container">
+      <div className="space-y-5">
+        <CategoryBreadcrumb categories={categories} slugs={params.category} />
+        <h1 className="text-3xl tracking-tight font-bold lg:text-4xl">
+          {rootCategory.title}
+        </h1>
+        <CategoryNavigation categories={categories} params={params.category} />
+      </div>
+      <Suspense fallback={<CategoryProductsSkeleton />}>
+        <CategoryProducts id={category._id} />
+      </Suspense>
     </section>
-  );
-}
-
-function CategoryNavigationSection({
-  categories,
-  params,
-}: {
-  categories: CategoriesByPathQueryResult;
-  params: string[];
-}) {
-  return (
-    <div>
-      {categories.map((category, index) => (
-        <CategoryNavigationItem
-          key={category._id}
-          category={category}
-          params={params}
-          depth={index + 1}
-        />
-      ))}
-    </div>
-  );
-}
-
-function CategoryNavigationItem({
-  category,
-  params,
-  depth,
-}: {
-  category: CategoryWithChildren;
-  params: string[];
-  depth: number;
-}) {
-  return (
-    <div>
-      {category.category_children?.map((child) => {
-        const isCurrent = child.slug?.current === params[depth];
-        const href = `/categories/${params.slice(0, depth).join("/")}/${child.slug?.current}`;
-
-        return (
-          <Button
-            key={child._id}
-            variant={isCurrent ? "default" : "outline"}
-            asChild
-          >
-            <Link href={href}>
-              {child.title} {child.product_count}
-            </Link>
-          </Button>
-        );
-      })}
-    </div>
-  );
-}
-
-async function ProductGrid({ id }: { id: string }) {
-  const products = await getCategoryProducts({ id });
-
-  return (
-    <div className="grid lg:grid-cols-4">
-      {products.map((product) => {
-        const { store } = product;
-        if (!store) return null;
-
-        const { title, descriptionHtml, previewImageUrl, slug } = store;
-
-        if (!slug?.current) return null;
-
-        return (
-          <div key={product._id}>
-            <Link href={`/products/${slug?.current}`}>
-              <div className="aspect-square relative">
-                {previewImageUrl ? (
-                  <Image
-                    src={previewImageUrl}
-                    alt={title ?? "Product image"}
-                    fill
-                    className="object-cover"
-                  />
-                ) : null}
-              </div>
-              <h2>{title}</h2>
-            </Link>
-          </div>
-        );
-      })}
-    </div>
   );
 }

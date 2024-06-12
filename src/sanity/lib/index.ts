@@ -34,8 +34,6 @@ export async function getCategoriesByPath({
    const isValidPath = categories.every((category, index) => {
       if (!category.parent && index === categories.length - 1) return true;
 
-      console.log(category.parent?._ref, categories[index + 1]?._id)
-
       return category.parent?._ref === categories[index + 1]._id;
    });
 

@@ -76,6 +76,7 @@ export type ProductVariant = {
   id: string;
   title: string;
   availableForSale: boolean;
+  quantityAvailable: number;
   selectedOptions: {
     name: string;
     value: string;
@@ -112,6 +113,7 @@ export type ShopifyProduct = {
   id: string;
   handle: string;
   availableForSale: boolean;
+  totalInventory: number;
   title: string;
   description: string;
   descriptionHtml: string;
@@ -239,6 +241,13 @@ export type ShopifyPagesOperation = {
 
 export type ShopifyProductOperation = {
   data: { product: ShopifyProduct };
+  variables: {
+    handle: string;
+  };
+};
+
+export type ShopifyProductAvailabilityOperation = {
+  data: { product: Pick<ShopifyProduct, "availableForSale" | "variants" | "totalInventory"> };
   variables: {
     handle: string;
   };

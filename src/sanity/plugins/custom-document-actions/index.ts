@@ -44,7 +44,7 @@ export const resolveDocumentActions: DocumentActionsResolver = (prev, { schemaTy
   }
 
   if (schemaType === 'category') {
-    prev = prev.filter((previousAction: DocumentActionComponent) => previousAction.action === 'publish')
+    prev = prev.filter((previousAction: DocumentActionComponent) => previousAction.action !== 'publish')
 
     return [
       CategoryPublish as DocumentActionComponent,

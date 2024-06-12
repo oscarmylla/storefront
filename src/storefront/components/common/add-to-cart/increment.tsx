@@ -37,6 +37,8 @@ export default function Increment({
 
   const selectedVariantId = variant?.id || defaultVariantId;
 
+  console.log(variant?.id || defaultVariantId);
+
   const line = cart?.lines.find(
     (line) => line.merchandise.id === selectedVariantId
   );
@@ -50,6 +52,8 @@ export default function Increment({
       variantId: selectedVariantId,
       quantity: type === "plus" ? quantity + 1 : quantity - 1,
     };
+
+    console.log("UPDATE", payload.variantId);
 
     if (payload.quantity === currentQuantity || !payload.variantId) return;
 

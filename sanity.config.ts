@@ -49,6 +49,10 @@ export default defineConfig({
     },
   },
 
+  scheduledPublishing: {
+    enabled: false,
+  },
+
   plugins: [
     structureTool({ structure }),
     presentationTool({

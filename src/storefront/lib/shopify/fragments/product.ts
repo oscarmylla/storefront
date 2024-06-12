@@ -1,11 +1,13 @@
 import imageFragment from './image';
 import seoFragment from './seo';
+import variantFragment from './variant';
 
 const productFragment = /* GraphQL */ `
   fragment product on Product {
     id
     handle
     availableForSale
+    totalInventory
     title
     description
     descriptionHtml
@@ -27,17 +29,7 @@ const productFragment = /* GraphQL */ `
     variants(first: 250) {
       edges {
         node {
-          id
-          title
-          availableForSale
-          selectedOptions {
-            name
-            value
-          }
-          price {
-            amount
-            currencyCode
-          }
+          ...variant
         }
       }
     }
@@ -57,6 +49,7 @@ const productFragment = /* GraphQL */ `
     tags
     updatedAt
   }
+  ${variantFragment}
   ${imageFragment}
   ${seoFragment}
 `;

@@ -75,6 +75,11 @@ export const product = defineType({
         "This array contains references to all parent categories, maintaining order from the root.",
       readOnly: true,
     }),
+    defineField({
+      name: "sales",
+      title: "Sales",
+      type: "number",
+    }),
   ],
   orderings: [
     {

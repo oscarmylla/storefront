@@ -51,8 +51,11 @@ import {
   ShopifyProductRecommendationsOperation,
   ShopifyProductsOperation,
   ShopifyRemoveFromCartOperation,
-  ShopifyUpdateCartOperation
+  ShopifyUpdateCartOperation,
+  ShopifyWebhookOrder
 } from './types';
+import { waitUntil } from '@vercel/functions';
+import { incrementProductSales } from '@/sanity/lib';
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN
   ? ensureStartsWith(process.env.SHOPIFY_STORE_DOMAIN, 'https://')
@@ -482,6 +485,35 @@ export async function revalidate(req: NextRequest): Promise<NextResponse> {
 
   if (isProductUpdate) {
     revalidateTag(TAGS.products);
+  }
+
+  return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
+}
+
+// This is called from `app/api/webhooks/shopify/orders/create.ts` so providers can control incrementing sales logic.
+export async function incrementSales(req: NextRequest): Promise<NextResponse> {
+  // We always need to respond with a 200 status code to Shopify,
+  // otherwise it will continue to retry the request.
+  const orderWebhooks = ['orders/create'];
+  const topic = headers().get('x-shopify-topic') || 'unknown';
+  const secret = req.nextUrl.searchParams.get('secret');
+  const isOrderUpdate = orderWebhooks.includes(topic);
+  const text = await req.text()
+
+  if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
+    console.error('Invalid revalidation secret.');
+    return NextResponse.json({ status: 200 });
+  }
+
+  if (!isOrderUpdate) {
+    // We don't need to revalidate anything for any other topics.
+    return NextResponse.json({ status: 200 });
+  }
+
+  const body: ShopifyWebhookOrder | undefined = JSON.parse(text)
+
+  if (body) {
+    waitUntil(incrementProductSales(body))
   }
 
   return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });

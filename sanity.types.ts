@@ -663,6 +663,7 @@ export type Product = {
     _key: string;
     [internalGroqTypeReferenceTo]?: "category";
   }>;
+  sales?: number;
 };
 
 export type Category = {
@@ -1391,7 +1392,7 @@ export type CategoriesByPathQueryResult = Array<{
   }>;
 }>;
 // Variable: categoryProductsQuery
-// Query: *[_type == "product" && references($id)]
+// Query: *[_type == "product" && references($id) && store.status == "active"] | order(defined(sales) desc, sales desc, _createdAt desc){  ...,  "sales": null}
 export type CategoryProductsQueryResult = Array<{
   _id: string;
   _type: "product";
@@ -1423,6 +1424,7 @@ export type CategoryProductsQueryResult = Array<{
     _key: string;
     [internalGroqTypeReferenceTo]?: "category";
   }>;
+  sales: null;
 }>;
 // Variable: categoryPathQuery
 // Query: *[_type == "category" && _id == $id][0]{ path }

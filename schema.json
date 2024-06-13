@@ -4153,6 +4153,13 @@
           }
         },
         "optional": true
+      },
+      "sales": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "number"
+        },
+        "optional": true
       }
     }
   },

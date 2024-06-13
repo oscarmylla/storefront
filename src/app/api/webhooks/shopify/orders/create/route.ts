@@ -1,4 +1,4 @@
-
+export const runtime = 'edge'
 
 import { incrementSales } from '@/storefront/lib/shopify';
 import { NextRequest, NextResponse } from 'next/server';

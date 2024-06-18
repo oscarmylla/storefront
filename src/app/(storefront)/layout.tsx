@@ -7,7 +7,7 @@ import {
   toPlainText,
   type PortableTextBlock,
 } from "next-sanity";
-import { Inter } from "next/font/google";
+import { DM_Sans as FontSans } from "next/font/google";
 import { draftMode } from "next/headers";
 import { Suspense } from "react";
 
@@ -21,8 +21,6 @@ import { settingsQuery } from "@/sanity/lib/queries";
 import { resolveOpenGraphImage } from "@/sanity/utils/resolveOpenGraphImage";
 import Navbar from "@/storefront/components/layout/navbar";
 import { cn } from "@/storefront/lib/utils";
-
-import { GeistSans } from "geist/font/sans";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await sanityFetch<SettingsQueryResult>({
@@ -55,10 +53,9 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const inter = Inter({
-  variable: "--font-inter",
+const fontSans = FontSans({
   subsets: ["latin"],
-  display: "swap",
+  variable: "--font-sans",
 });
 
 async function Footer() {
@@ -111,7 +108,7 @@ export default function RootLayout({
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
-          GeistSans.variable
+          fontSans.variable
         )}
       >
         <section className="min-h-screen">

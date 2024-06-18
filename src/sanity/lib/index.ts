@@ -3,6 +3,7 @@ import { sanityFetch } from "./fetch";
 import { categoriesByPathQuery, categoriesQuery, categoryProductsQuery } from "./queries";
 import { ShopifyWebhookOrder } from "@/storefront/lib/shopify/types";
 import { developerClient } from "./client";
+import { TAGS } from "@/storefront/lib/sanity/constants";
 
 export async function getCategories() {
    return await sanityFetch<CategoriesQueryResult>({
@@ -18,6 +19,7 @@ export async function getCategoriesByPath({
    const categories = await sanityFetch<CategoriesByPathQueryResult>({
       query: categoriesByPathQuery,
       params: { slugs },
+      tags: [TAGS.categories],
    });
 
    if (!categories) return null;
@@ -36,7 +38,7 @@ export async function getCategoriesByPath({
    const isValidPath = categories.every((category, index) => {
       if (!category.parent && index === categories.length - 1) return true;
 
-      return category.parent?._ref === categories[index + 1]._id;
+      return category.parent?._ref === categories[index + 1]?._id;
    });
 
    if (!isValidPath) return null;

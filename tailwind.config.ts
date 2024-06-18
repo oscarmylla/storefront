@@ -16,7 +16,10 @@ const config = {
     },
     extend: {
       fontFamily: {
-        sans: ['var(--font-geist-sans)', ...fontFamily.sans]
+        sans: ["var(--font-sans)", ...fontFamily.sans],
+      },
+      dropShadow: {
+        'mylla': '4px 5px 0 rgba(0, 0, 0, 1)',
       },
       colors: {
         border: "hsl(var(--border))",

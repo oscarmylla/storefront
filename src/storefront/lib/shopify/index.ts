@@ -192,7 +192,7 @@ const reshapeProduct = (product: ShopifyProduct, filterHiddenProducts: boolean =
   };
 };
 
-const reshapeProductAvailability = (product: Pick<ShopifyProduct, "availableForSale" | "variants" | "totalInventory">, filterHiddenProducts: boolean = true) => {
+const reshapeProductAvailability = (product: Pick<ShopifyProduct, "availableForSale" | "variants" | "totalInventory" | "priceRange">, filterHiddenProducts: boolean = true) => {
   if (!product) {
     return undefined;
   }
@@ -409,7 +409,7 @@ export async function getProduct(handle: string): Promise<Product | undefined> {
   return reshapeProduct(res.body.data.product, false);
 }
 
-export async function getProductAvailability(handle: string): Promise<Pick<Product, "availableForSale" | "variants" | "totalInventory"> | undefined> {
+export async function getProductAvailability(handle: string): Promise<Pick<Product, "availableForSale" | "variants" | "totalInventory" | "priceRange"> | undefined> {
   const res = await shopifyFetch<ShopifyProductAvailabilityOperation>({
     query: getProductAvailabilityQuery,
     tags: [TAGS.products],

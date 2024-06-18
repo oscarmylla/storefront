@@ -8,6 +8,17 @@ const variantFragment = /* GraphQL */ `
       name
       value
    }
+   unitPrice {
+      amount
+      currencyCode
+   }
+   unitPriceMeasurement {
+      measuredType
+      quantityUnit
+      quantityValue
+      referenceUnit
+      referenceValue
+   }
    price {
       amount
       currencyCode

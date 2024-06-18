@@ -1,13 +1,8 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getCategoriesByPath } from "@/sanity/lib";
-import React, { Suspense } from "react";
-import { CategoryBreadcrumb } from "@/storefront/components/category/breadcrumb";
-import { CategoryNavigation } from "@/storefront/components/category/navigation";
-import {
-  CategoryProducts,
-  CategoryProductsSkeleton,
-} from "@/storefront/components/category/products";
+import React from "react";
+import CategoryMain from "@/storefront/components/category";
 
 export async function generateMetadata({
   params,
@@ -42,20 +37,7 @@ export default async function CategoryPage({
 
   const category = categories[categories.length - 1];
 
-  const rootCategory = categories[0];
-
   return (
-    <section className="container">
-      <div className="space-y-5">
-        <CategoryBreadcrumb categories={categories} slugs={params.category} />
-        <h1 className="text-3xl tracking-tight font-bold lg:text-4xl">
-          {rootCategory.title}
-        </h1>
-        <CategoryNavigation categories={categories} params={params.category} />
-      </div>
-      <Suspense fallback={<CategoryProductsSkeleton />}>
-        <CategoryProducts id={category._id} />
-      </Suspense>
-    </section>
+    <CategoryMain params={params} category={category} categories={categories} />
   );
 }

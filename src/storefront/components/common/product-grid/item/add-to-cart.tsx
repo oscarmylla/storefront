@@ -1,12 +1,26 @@
 "use client";
 
 import React from "react";
-import AddToCartWrapper from "../../common/add-to-cart/wrapper";
 import { Cart } from "@/storefront/lib/shopify/types";
-import { Button } from "../../ui/button";
 import { Loader2, Minus, Plus } from "lucide-react";
+import {
+  ButtonProps,
+  Button as UIButton,
+} from "@/storefront/components/ui/button";
+import { AddToCartWrapper } from "../../add-to-cart";
+import { cn } from "@/storefront/lib/utils";
 
-export function CategoryProductsAddToCart({
+function Button({ className, ...props }: ButtonProps) {
+  return (
+    <UIButton
+      {...props}
+      size="icon"
+      className={cn("rounded-full", className)}
+    />
+  );
+}
+
+export function ProductGridItemAddToCart({
   selectedVariantId,
   cart,
   availableForSale,
@@ -18,7 +32,7 @@ export function CategoryProductsAddToCart({
   quantityAvailable?: number;
 }) {
   return (
-    <div className="flex items-stretch border rounded-lg">
+    <div className="flex justify-end">
       <AddToCartWrapper
         selectedVariantId={selectedVariantId}
         cart={cart}
@@ -27,40 +41,48 @@ export function CategoryProductsAddToCart({
         {({ increment, decrement, optimisticQuantity, loading }) => {
           if (!availableForSale) {
             return (
-              <Button disabled className="flex-1">
-                Slutsåld
+              <Button disabled>
+                <Plus className="size-4" />
               </Button>
             );
           }
 
           if (optimisticQuantity === 0) {
             return (
-              <Button onClick={increment} className="flex-1" disabled={loading}>
+              <Button onClick={increment} disabled={loading}>
                 {loading ? (
                   <Loader2 className="size-4 animate-spin" />
                 ) : (
-                  <>Lägg till</>
+                  <Plus className="size-4" />
                 )}
               </Button>
             );
           }
 
           return (
-            <>
-              <Button onClick={decrement} size="icon">
+            <div className="flex">
+              <Button
+                onClick={decrement}
+                className="rounded-r-none"
+                variant="outline"
+              >
                 <Minus className="size-4" />
               </Button>
-              <span className="flex items-center flex-1 text-center justify-center">
+              <span className="flex items-center text-center justify-center w-10 border border-x-0">
                 {loading ? (
                   <Loader2 className="size-4 animate-spin" />
                 ) : (
                   <>{optimisticQuantity}</>
                 )}
               </span>
-              <Button onClick={increment} size="icon">
+              <Button
+                onClick={increment}
+                className="rounded-l-none"
+                variant="outline"
+              >
                 <Plus className="size-4" />
               </Button>
-            </>
+            </div>
           );
         }}
       </AddToCartWrapper>

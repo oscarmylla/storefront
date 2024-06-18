@@ -1,22 +1,8 @@
-import { Product } from "@/sanity.types";
-import { CategoryGridItem, CategoryGridItemSkeleton } from "./item";
-import { Suspense } from "react";
+import { getCategoryProducts } from "@/sanity/lib";
+import { ProductGrid } from "@/storefront/components/common/product-grid";
 
-export function CategoryProductGrid({ products }: { products: Product[] }) {
-  if (products.length === 0)
-    return (
-      <div className="col-span-4 text-center py-20">
-        <p>Inga produkter hittades.</p>
-      </div>
-    );
+export async function CategoryProductGrid({ id }: { id: string }) {
+  const products = await getCategoryProducts({ id });
 
-  return (
-    <>
-      {products.map((product) => (
-        <Suspense key={product._id} fallback={<CategoryGridItemSkeleton />}>
-          <CategoryGridItem product={product} />
-        </Suspense>
-      ))}
-    </>
-  );
+  return <ProductGrid products={products} />;
 }

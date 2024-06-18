@@ -50,6 +50,27 @@ export type Money = {
   currencyCode: string;
 };
 
+export enum UnitPriceMeasurementMeasuredType {
+  AREA = "AREA",
+  LENGTH = "LENGTH",
+  VOLUME = "VOLUME",
+  WEIGHT = "WEIGHT",
+}
+
+export enum UnitPriceMeasurementMeasuredUnit {
+  CL = "CL",
+  CM = "CM",
+  G = "G",
+  KG = "KG",
+  L = "L",
+  M = "M",
+  M2 = "M2",
+  M3 = "M3",
+  MG = "MG",
+  ML = "ML",
+  MM = "MM",
+}
+
 export type Page = {
   id: string;
   title: string;
@@ -82,6 +103,14 @@ export type ProductVariant = {
     value: string;
   }[];
   price: Money;
+  unitPrice?: Money;
+  unitPriceMeasurement?: {
+    measuredType: UnitPriceMeasurementMeasuredType;
+    quantityUnit: UnitPriceMeasurementMeasuredUnit;
+    quantityValue: number;
+    referenceUnit: UnitPriceMeasurementMeasuredUnit;
+    referenceValue: number;
+  };
 };
 
 export type SEO = {
@@ -247,7 +276,7 @@ export type ShopifyProductOperation = {
 };
 
 export type ShopifyProductAvailabilityOperation = {
-  data: { product: Pick<ShopifyProduct, "availableForSale" | "variants" | "totalInventory"> };
+  data: { product: Pick<ShopifyProduct, "availableForSale" | "variants" | "totalInventory" | "priceRange"> };
   variables: {
     handle: string;
   };

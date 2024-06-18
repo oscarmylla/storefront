@@ -6,6 +6,8 @@ import { categoryPathQuery } from '../../lib/queries'
 import { Category, CategoryPathQueryResult } from '@/sanity.types'
 import { CategoryActionProps } from './types'
 import { nanoid } from 'nanoid'
+import { revalidateTag } from 'next/cache'
+import { TAGS } from '@/storefront/lib/sanity/constants'
 
 export function CategoryPublish(props: CategoryActionProps) {
    const {

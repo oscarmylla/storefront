@@ -53,6 +53,7 @@ export function Gallery({
                 href={previousUrl}
                 className={buttonClassName}
                 scroll={false}
+                replace={true}
               >
                 <ArrowLeftIcon className="h-5" />
               </Link>
@@ -62,6 +63,7 @@ export function Gallery({
                 href={nextUrl}
                 className={buttonClassName}
                 scroll={false}
+                replace={true}
               >
                 <ArrowRightIcon className="h-5" />
               </Link>
@@ -87,6 +89,7 @@ export function Gallery({
                   href={createUrl(pathname, imageSearchParams)}
                   scroll={false}
                   className="h-full w-full"
+                  replace={true}
                 >
                   <GridTileImage
                     alt={image.altText}

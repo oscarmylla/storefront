@@ -9,7 +9,7 @@ export function ProductGridItemImage({
   title?: string;
 }) {
   return (
-    <div className="aspect-square relative rounded-md overflow-hidden">
+    <div className="aspect-square relative rounded-md overflow-hidden rounded-b-none">
       {previewImageUrl ? (
         <Image
           src={previewImageUrl}

@@ -284,7 +284,7 @@ export type ShopifyProductAvailabilityOperation = {
 
 export type ShopifyProductRecommendationsOperation = {
   data: {
-    productRecommendations: ShopifyProduct[];
+    productRecommendations: { id: string }[];
   };
   variables: {
     productId: string;

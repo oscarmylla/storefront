@@ -1,5 +1,5 @@
 import React from "react";
-import { CategoryBreadcrumb } from "./breadcrumbs";
+import { CategoryBreadcrumb } from "./breadcrumb";
 import { CategoryWithChildrenAndProductCount } from "@/sanity/types/category";
 import { Category } from "@/sanity.types";
 import { CategoryProducts } from "./products";
@@ -17,12 +17,14 @@ export default function CategoryMain({
 }) {
   const rootCategory = categories[0];
   return (
-    <div className="container">
-      <div className="space-y-5">
-        <CategoryBreadcrumb categories={categories} slugs={params.category} />
-        <h1 className="text-3xl tracking-tight font-bold lg:text-4xl">
-          {rootCategory?.title}
-        </h1>
+    <div className="container py-7">
+      <div className="space-y-6">
+        <div className="space-y-3">
+          <CategoryBreadcrumb categories={categories} slugs={params.category} />
+          <h1 className="text-3xl tracking-tight lg:text-4xl font-serif font-bold">
+            {rootCategory?.title}
+          </h1>
+        </div>
         <CategoryNavigation categories={categories} slugs={params.category} />
         <CategoryControls />
       </div>

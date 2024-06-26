@@ -1,35 +1,46 @@
-import { Gallery } from "@/storefront/components/product/gallery";
-import { ProductDescription } from "@/storefront/components/product/product-description";
-import { Image, Product } from "@/storefront/lib/shopify/types";
+import {
+  Image,
+  ProductVariant,
+  Product as ShopifyProduct,
+} from "@/storefront/lib/shopify/types";
 import { Suspense } from "react";
 import { RelatedProducts } from "./related-products";
+import { Category, Product } from "@/sanity.types";
+import { ProductBreadcrumb } from "./breadcrumb";
+import { ProductDetails } from "./product-details";
+import { ProductHero } from "./hero";
 
-export function ProductMain({ product }: { product: Product }) {
+export async function ProductMain({
+  shopifyProduct,
+  product,
+  selectedVariant,
+  modal = false,
+}: {
+  shopifyProduct: ShopifyProduct;
+  product: Omit<Product, "categoryPath"> & {
+    categoryPath: Category[] | null;
+  };
+  selectedVariant: ProductVariant;
+  modal?: boolean;
+}) {
   return (
-    <>
-      <div className="flex flex-col lg:flex-row lg:gap-8 ">
-        <div className="h-full w-full basis-full lg:basis-4/6">
-          <Suspense
-            fallback={
-              <div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden" />
-            }
-          >
-            <Gallery
-              images={product.images.map((image: Image) => ({
-                src: image.url,
-                altText: image.altText,
-              }))}
-            />
-          </Suspense>
-        </div>
-
-        <div className="basis-full lg:basis-2/6">
-          <ProductDescription product={product} />
-        </div>
-      </div>
+    <div className="py-6 container">
+      {!modal && (
+        <ProductBreadcrumb
+          categories={product.categoryPath}
+          productTitle={product.store?.title}
+          className="mb-4"
+        />
+      )}
+      <ProductHero
+        shopifyProduct={shopifyProduct}
+        product={product}
+        selectedVariant={selectedVariant}
+      />
+      <ProductDetails product={product} />
       <Suspense>
-        <RelatedProducts id={product.id} />
+        <RelatedProducts id={shopifyProduct.id} />
       </Suspense>
-    </>
+    </div>
   );
 }

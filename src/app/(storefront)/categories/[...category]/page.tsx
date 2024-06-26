@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getCategoriesByPath } from "@/sanity/lib";
+import { getCategoriesByPath } from "@/sanity/data/category";
 import React from "react";
 import CategoryMain from "@/storefront/components/category";
 

@@ -17,8 +17,9 @@ import type {
 } from "@/sanity.types";
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { postQuery, settingsQuery } from "@/sanity/lib/queries";
 import { resolveOpenGraphImage } from "@/sanity/utils/resolveOpenGraphImage";
+import { postQuery } from "@/sanity/queries/post";
+import { settingsQuery } from "@/sanity/queries/settings";
 
 type Props = {
   params: { slug: string };

@@ -6,7 +6,7 @@ import DateComponent from "./date";
 
 import type { MoreStoriesQueryResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { moreStoriesQuery } from "@/sanity/lib/queries";
+import { moreStoriesQuery } from "@/sanity/queries/post";
 
 export default async function MoreStories(params: {
   skip: string;

@@ -9,6 +9,7 @@ import {
 import { Button, buttonVariants } from "@/storefront/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/storefront/lib/utils";
+import { Check, ChevronDown } from "lucide-react";
 
 export function CategoryNavigationSelect({
   category,
@@ -30,86 +31,69 @@ export function CategoryNavigationSelect({
   if (!hasChildren) return null;
 
   return (
-    <>
-      <Collapsible className="border rounded-md">
-        <CollapsibleTrigger asChild>
-          <Button
-            className="w-full border-0 justify-start"
-            variant="outline"
-            size="lg"
-          >
-            {selectedChild ? selectedChild.title : "Alla"} ({product_count})
-          </Button>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="border-t">
-          {category_children.map((child) => {
-            const { _id, slug, title, product_count } = child;
-            if (!slug?.current) return null;
-            const href = `/categories/${slugs.slice(0, depth).join("/")}/${slug.current}`;
-            const isCurrent = slug.current === slugs[depth];
-
-            return (
-              <Link
-                key={_id}
-                href={href}
-                className={cn(
-                  buttonVariants({
-                    size: "lg",
-                    variant: "outline",
-                  }),
-                  "w-full justify-start border-0 border-b last-of-type:border-b-0 rounded-none",
-                  {
-                    "text-primary font-bold": isCurrent,
-                  }
-                )}
-              >
-                {title} ({product_count})
-              </Link>
-            );
-          })}
-        </CollapsibleContent>
-      </Collapsible>
-      {/* <DropdownMenu modal={false}>
-        <DropdownMenuTrigger asChild>
-          <Button className="w-full">
-            {title} ({product_count})
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent
-          className="dropdown-menu-content-width-full"
-          alignOffset={0}
+    <Collapsible className="border rounded-md">
+      <CollapsibleTrigger asChild>
+        <Button
+          className="w-full border-0 text-base justify-between group font-normal"
+          variant="outline"
+          size="lg"
         >
-          <DropdownMenuItem asChild>
+          {selectedChild ? selectedChild.title : "Alla"} ({product_count})
+          <ChevronDown className="size-5 group-data-[state=open]:rotate-180" />
+        </Button>
+      </CollapsibleTrigger>
+      <CollapsibleContent className="border-t">
+        <Link
+          href={href}
+          className={cn(
+            buttonVariants({
+              size: "lg",
+              variant: "outline",
+            }),
+            "w-full justify-start gap-1.5 border-0 border-t-1 border-b last-of-type:border-b-0 rounded-none text-primary/80",
+            {
+              "text-primary font-semibold": isCurrent,
+            }
+          )}
+        >
+          <Check
+            className={cn("size-4", {
+              "opacity-0": !isCurrent,
+            })}
+          />
+          Alla ({product_count})
+        </Link>
+        {category_children.map((child) => {
+          const { _id, slug, title, product_count } = child;
+          if (!slug?.current) return null;
+          const href = `/categories/${slugs.slice(0, depth).join("/")}/${slug.current}`;
+          const isCurrent = slug.current === slugs[depth];
+
+          return (
             <Link
+              key={_id}
               href={href}
-              className={cn({
-                "text-primary font-bold": isCurrent,
-              })}
+              className={cn(
+                buttonVariants({
+                  size: "lg",
+                  variant: "outline",
+                }),
+                "w-full justify-start gap-1.5 border-0 border-b last-of-type:border-b-0 rounded-none text-primary/80",
+                {
+                  "text-primary font-semibold": isCurrent,
+                }
+              )}
             >
+              <Check
+                className={cn("size-4", {
+                  "opacity-0": !isCurrent,
+                })}
+              />
               {title} ({product_count})
             </Link>
-          </DropdownMenuItem>
-          {category_children?.map((child) => {
-            const { _id, slug, title, product_count } = child;
-            if (!slug?.current) return null;
-            const href = `/categories/${slugs.slice(0, depth).join("/")}/${slug.current}`;
-            const isCurrent = slug.current === slugs[depth];
-
-            return (
-              <DropdownMenuItem key={_id} asChild>
-                <Link
-                  href={href}
-                  className={cn({
-                    "text-primary font-bold": isCurrent,
-                  })}
-                >
-                  {title} ({product_count})
-                </Link>
-              </DropdownMenuItem>
-            );
-          })}
-        </DropdownMenuContent>
-      </DropdownMenu> */}
-    </>
+          );
+        })}
+      </CollapsibleContent>
+    </Collapsible>
   );
 }

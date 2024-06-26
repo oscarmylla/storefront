@@ -1111,66 +1111,127 @@ export type SanityAssistSchemaTypeField = {
   } & SanityAssistInstruction>;
 };
 export declare const internalGroqTypeReferenceTo: unique symbol;
-// Source: ./src/sanity/lib/queries.ts
-// Variable: settingsQuery
-// Query: *[_type == "settings"][0]
-export type SettingsQueryResult = {
+// Source: ./src/sanity/queries/category.ts
+// Variable: categoriesQuery
+// Query: *[_type == "category" && !defined(parent)]{    ...,    "product_count": count(*[_type=="product" && references(^._id)])}
+export type CategoriesQueryResult = Array<{
   _id: string;
-  _type: "settings";
+  _type: "category";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
   title?: string;
-  description?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal";
-    listItem?: never;
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
+  slug?: Slug;
+  parent?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
+  path?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
     _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
   }>;
-  footer?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
-    listItem?: "bullet" | "number";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
+  product_count: number;
+}>;
+// Variable: categoriesByPathQuery
+// Query: *[_type == "category" && slug.current in $slugs]{    ...,    "product_count": count(*[_type == "product" && references(^._id) && store.status == "active"]),    "category_children": *[_type=="category" && parent._ref == ^._id]{      ...,      "product_count": count(*[_type == "product" && references(^._id) && store.status == "active"])    }}
+export type CategoriesByPathQueryResult = Array<{
+  _id: string;
+  _type: "category";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  parent?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
+  path?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
     _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
   }>;
-  ogImage?: {
-    asset?: {
+  product_count: number;
+  category_children: Array<{
+    _id: string;
+    _type: "category";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    title?: string;
+    slug?: Slug;
+    parent?: {
       _ref: string;
       _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      [internalGroqTypeReferenceTo]?: "category";
     };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    metadataBase?: string;
-    _type: "image";
+    path?: Array<{
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      _key: string;
+      [internalGroqTypeReferenceTo]?: "category";
+    }>;
+    product_count: number;
+  }>;
+}>;
+// Variable: categoryProductsQuery
+// Query: *[_type == "product" && references($id) && store.status == "active"] | order(defined(sales) desc, sales desc, _createdAt desc){  ...,  "sales": null}
+export type CategoryProductsQueryResult = Array<{
+  _id: string;
+  _type: "product";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  hidden?: string;
+  titleProxy?: ProxyString;
+  slugProxy?: ProxyString;
+  colorTheme?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "colorTheme";
   };
+  body?: PortableText;
+  store?: ShopifyProduct;
+  seo?: Seo;
+  category?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
+  categoryPath?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
+  }>;
+  sales: null;
+}>;
+// Variable: categoryPathQuery
+// Query: *[_type == "category" && _id == $id][0]{ path }
+export type CategoryPathQueryResult = {
+  path: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
+  }> | null;
 } | null;
+// Source: ./src/sanity/queries/home.ts
 // Variable: heroQuery
 // Query: *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) [0] {  content,    _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{"name": coalesce(name, "Anonymous"), picture},}
 export type HeroQueryResult = {
@@ -1226,6 +1287,7 @@ export type HeroQueryResult = {
     } | null;
   } | null;
 } | null;
+// Source: ./src/sanity/queries/post.ts
 // Variable: moreStoriesQuery
 // Query: *[_type == "post" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {    _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{"name": coalesce(name, "Anonymous"), picture},}
 export type MoreStoriesQueryResult = Array<{
@@ -1318,56 +1380,34 @@ export type PostQueryResult = {
     } | null;
   } | null;
 } | null;
-// Variable: categoriesQuery
-// Query: *[_type == "category" && !defined(parent)]{    ...,    "product_count": count(*[_type=="product" && references(^._id)])}
-export type CategoriesQueryResult = Array<{
+// Source: ./src/sanity/queries/product.ts
+// Variable: productByHandleQuery
+// Query: *[_type == "product" && store.slug.current == $handle][0]{   ...,   categoryPath[]->}
+export type ProductByHandleQueryResult = {
   _id: string;
-  _type: "category";
+  _type: "product";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  title?: string;
-  slug?: Slug;
-  parent?: {
+  hidden?: string;
+  titleProxy?: ProxyString;
+  slugProxy?: ProxyString;
+  colorTheme?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "colorTheme";
+  };
+  body?: PortableText;
+  store?: ShopifyProduct;
+  seo?: Seo;
+  category?: {
     _ref: string;
     _type: "reference";
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "category";
   };
-  path?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "category";
-  }>;
-  product_count: number;
-}>;
-// Variable: categoriesByPathQuery
-// Query: *[_type == "category" && slug.current in $slugs]{    ...,    "product_count": count(*[_type == "product" && references(^._id)]),    "category_children": *[_type=="category" && parent._ref == ^._id]{      ...,      "product_count": count(*[_type == "product" && references(^._id)])    }}
-export type CategoriesByPathQueryResult = Array<{
-  _id: string;
-  _type: "category";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  slug?: Slug;
-  parent?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "category";
-  };
-  path?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "category";
-  }>;
-  product_count: number;
-  category_children: Array<{
+  categoryPath: Array<{
     _id: string;
     _type: "category";
     _createdAt: string;
@@ -1388,12 +1428,12 @@ export type CategoriesByPathQueryResult = Array<{
       _key: string;
       [internalGroqTypeReferenceTo]?: "category";
     }>;
-    product_count: number;
-  }>;
-}>;
-// Variable: categoryProductsQuery
-// Query: *[_type == "product" && references($id) && store.status == "active"] | order(defined(sales) desc, sales desc, _createdAt desc){  ...,  "sales": null}
-export type CategoryProductsQueryResult = Array<{
+  }> | null;
+  sales?: number;
+} | null;
+// Variable: productsByIdsQuery
+// Query: *[_type == "product" && _id in $ids]
+export type ProductsByIdsQueryResult = Array<{
   _id: string;
   _type: "product";
   _createdAt: string;
@@ -1424,18 +1464,67 @@ export type CategoryProductsQueryResult = Array<{
     _key: string;
     [internalGroqTypeReferenceTo]?: "category";
   }>;
-  sales: null;
+  sales?: number;
 }>;
-// Variable: categoryPathQuery
-// Query: *[_type == "category" && _id == $id][0]{ path }
-export type CategoryPathQueryResult = {
-  path: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
+// Source: ./src/sanity/queries/settings.ts
+// Variable: settingsQuery
+// Query: *[_type == "settings"][0]
+export type SettingsQueryResult = {
+  _id: string;
+  _type: "settings";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  description?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal";
+    listItem?: never;
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
     _key: string;
-    [internalGroqTypeReferenceTo]?: "category";
-  }> | null;
+  }>;
+  footer?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+  ogImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    metadataBase?: string;
+    _type: "image";
+  };
 } | null;
 // Source: ./src/app/(storefront)/posts/[slug]/page.tsx
 // Variable: postSlugs

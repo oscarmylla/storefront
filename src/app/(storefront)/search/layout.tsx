@@ -1,4 +1,3 @@
-import Footer from "@/storefront/components/layout/footer";
 import Collections from "@/storefront/components/layout/search/collections";
 import FilterList from "@/storefront/components/layout/search/filter";
 import { sorting } from "@/storefront/lib/constants";
@@ -21,7 +20,6 @@ export default function SearchLayout({
           <FilterList list={sorting} title="Sort by" />
         </div>
       </div>
-      <Footer />
     </>
   );
 }

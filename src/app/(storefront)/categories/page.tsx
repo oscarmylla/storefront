@@ -1,5 +1,5 @@
 import { CategoriesQueryResult } from "@/sanity.types";
-import { getCategories } from "@/sanity/lib";
+import { getCategories } from "@/sanity/data/category";
 import { Button } from "@/storefront/components/ui/button";
 import Link from "next/link";
 import React from "react";

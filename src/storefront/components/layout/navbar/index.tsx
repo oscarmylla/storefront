@@ -7,13 +7,15 @@ import Link from "next/link";
 import { Suspense } from "react";
 import MobileMenu from "./mobile-menu";
 import Search, { SearchSkeleton } from "./search";
+import logo from "@/public/images/logo.webp";
+import Image from "next/image";
 const { SITE_NAME } = process.env;
 
 export default async function Navbar() {
   const menu = await getMenu("next-js-frontend-header-menu");
 
   return (
-    <nav className="relative flex items-center justify-between p-4 lg:px-6">
+    <nav className="relative flex items-center justify-between px-4 py-2 lg:px-6 lg:py-2.5">
       <div className="block flex-none md:hidden">
         <Suspense fallback={null}>
           <MobileMenu menu={menu} />
@@ -25,10 +27,11 @@ export default async function Navbar() {
             href="/"
             className="mr-2 flex w-full items-center justify-center md:w-auto lg:mr-6"
           >
-            <LogoSquare />
-            <div className="ml-2 flex-none text-sm font-medium uppercase md:hidden lg:block">
-              {SITE_NAME}
-            </div>
+            <Image
+              src={logo}
+              alt={SITE_NAME ?? "Logo"}
+              className="w-32 sm:w-36  h-auto"
+            />
           </Link>
           {menu.length ? (
             <ul className="hidden gap-6 text-sm md:flex md:items-center">

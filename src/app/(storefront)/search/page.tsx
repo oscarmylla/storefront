@@ -4,8 +4,8 @@ import { defaultSort, sorting } from "@/storefront/lib/constants";
 import { getProducts } from "@/storefront/lib/shopify";
 
 export const metadata = {
-  title: "Search",
-  description: "Search for products in the store.",
+  title: "Sök",
+  description: "Sök efter produkter.",
 };
 
 export default async function SearchPage({

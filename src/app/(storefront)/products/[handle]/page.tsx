@@ -1,30 +1,30 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-
-import { GridTileImage } from "@/storefront/components/grid/tile";
 import { HIDDEN_PRODUCT_TAG } from "@/storefront/lib/constants";
-import {
-  getProduct,
-  getProductRecommendations,
-} from "@/storefront/lib/shopify";
-import Link from "next/link";
+import { getProduct } from "@/storefront/lib/shopify";
 import { ProductMain } from "@/storefront/components/product";
+import { getProductByHandle } from "@/sanity/data/product";
 
 export async function generateMetadata({
   params,
 }: {
   params: { handle: string };
 }): Promise<Metadata> {
-  const product = await getProduct(params.handle);
+  const shopifyProduct = await getProduct(params.handle);
 
-  if (!product) return notFound();
+  if (!shopifyProduct) return notFound();
 
-  const { url, width, height, altText: alt } = product.featuredImage || {};
-  const indexable = !product.tags.includes(HIDDEN_PRODUCT_TAG);
+  const {
+    url,
+    width,
+    height,
+    altText: alt,
+  } = shopifyProduct.featuredImage || {};
+  const indexable = !shopifyProduct.tags.includes(HIDDEN_PRODUCT_TAG);
 
   return {
-    title: product.seo.title || product.title,
-    description: product.seo.description || product.description,
+    title: shopifyProduct.seo.title || shopifyProduct.title,
+    description: shopifyProduct.seo.description || shopifyProduct.description,
     robots: {
       index: indexable,
       follow: indexable,
@@ -53,24 +53,29 @@ export default async function ProductPage({
 }: {
   params: { handle: string };
 }) {
-  const product = await getProduct(params.handle);
+  const [shopifyProduct, product] = await Promise.all([
+    getProduct(params.handle),
+    getProductByHandle({ handle: params.handle }),
+  ]);
 
-  if (!product) return notFound();
+  if (!product?.store || !shopifyProduct) return notFound();
+
+  const selectedVariant = shopifyProduct?.variants[0];
 
   const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: product.title,
-    description: product.description,
-    image: product.featuredImage.url,
+    name: product.store.title,
+    description: shopifyProduct.description,
+    image: shopifyProduct.featuredImage.url,
     offers: {
       "@type": "AggregateOffer",
-      availability: product.availableForSale
+      availability: shopifyProduct.availableForSale
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
-      priceCurrency: product.priceRange.minVariantPrice.currencyCode,
-      highPrice: product.priceRange.maxVariantPrice.amount,
-      lowPrice: product.priceRange.minVariantPrice.amount,
+      priceCurrency: shopifyProduct.priceRange.minVariantPrice.currencyCode,
+      highPrice: shopifyProduct.priceRange.maxVariantPrice.amount,
+      lowPrice: shopifyProduct.priceRange.minVariantPrice.amount,
     },
   };
 
@@ -82,7 +87,11 @@ export default async function ProductPage({
           __html: JSON.stringify(productJsonLd),
         }}
       />
-      <ProductMain product={product} />
+      <ProductMain
+        shopifyProduct={shopifyProduct}
+        product={product}
+        selectedVariant={selectedVariant}
+      />
     </>
   );
 }

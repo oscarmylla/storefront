@@ -55,7 +55,7 @@ import {
   ShopifyWebhookOrder
 } from './types';
 import { waitUntil } from '@vercel/functions';
-import { incrementProductSales } from '@/sanity/lib';
+import { incrementProductSales } from '@/sanity/mutations/product';
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN
   ? ensureStartsWith(process.env.SHOPIFY_STORE_DOMAIN, 'https://')
@@ -421,7 +421,7 @@ export async function getProductAvailability(handle: string): Promise<Pick<Produ
   return reshapeProductAvailability(res.body.data.product, false);
 }
 
-export async function getProductRecommendations(productId: string): Promise<Product[]> {
+export async function getProductRecommendationIds(productId: string): Promise<string[]> {
   const res = await shopifyFetch<ShopifyProductRecommendationsOperation>({
     query: getProductRecommendationsQuery,
     tags: [TAGS.products],
@@ -430,7 +430,9 @@ export async function getProductRecommendations(productId: string): Promise<Prod
     }
   });
 
-  return reshapeProducts(res.body.data.productRecommendations);
+  const ids = res.body.data.productRecommendations.map((product) => product.id);
+
+  return ids
 }
 
 export async function getProducts({

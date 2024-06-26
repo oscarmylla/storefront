@@ -1,6 +1,5 @@
-import { getProductRecommendations } from "@/storefront/lib/shopify";
-import Link from "next/link";
-import { GridTileImage } from "../../grid/tile";
+import { getProductRecommendations } from "@/sanity/data/product";
+import { ProductGrid } from "../../common/product-grid";
 
 export async function RelatedProducts({ id }: { id: string }) {
   const relatedProducts = await getProductRecommendations(id);
@@ -8,9 +7,12 @@ export async function RelatedProducts({ id }: { id: string }) {
   if (!relatedProducts.length) return null;
 
   return (
-    <div className="py-8">
-      <h2 className="mb-4 text-2xl font-bold">Related Products</h2>
-      <ul className="flex w-full gap-4 overflow-x-auto pt-1">
+    <div className="py-8 lg:py-12 lg:space-y-6">
+      <h2 className="mb-4 text-xl text-[1.15rem] lg:text-[1.4rem] font-semibold">
+        Mer lokal mat i säsong
+      </h2>
+      <ProductGrid products={relatedProducts} />
+      {/* <ul className="flex w-full gap-4 overflow-x-auto pt-1">
         {relatedProducts.map((product) => (
           <li
             key={product.handle}
@@ -34,7 +36,7 @@ export async function RelatedProducts({ id }: { id: string }) {
             </Link>
           </li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   );
 }

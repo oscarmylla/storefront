@@ -16,9 +16,11 @@ export function CategoryNavigationPills({
   const href = `/categories/${slugs.slice(0, depth).join("/")}`;
   const hasChildren = category_children.length > 0;
 
+  if (!hasChildren) return null;
+
   return (
     <>
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex gap-1.5 flex-wrap">
         {hasChildren && (
           <CategoryNavigationPill
             isCurrent={isCurrent}

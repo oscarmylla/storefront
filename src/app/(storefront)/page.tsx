@@ -1,6 +1,5 @@
 import { Carousel } from "@/storefront/components/carousel";
 import { ThreeItemGrid } from "@/storefront/components/grid/three-items";
-import Footer from "@/storefront/components/layout/footer";
 
 export const metadata = {
   description:
@@ -15,7 +14,6 @@ export default async function HomePage() {
     <>
       <ThreeItemGrid />
       <Carousel />
-      <Footer />
     </>
   );
 }

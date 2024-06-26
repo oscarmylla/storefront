@@ -11,7 +11,8 @@ import PortableText from "@/storefront/components/portable-text";
 import type { HeroQueryResult, SettingsQueryResult } from "@/sanity.types";
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { heroQuery, settingsQuery } from "@/sanity/lib/queries";
+import { settingsQuery } from "@/sanity/queries/settings";
+import { heroQuery } from "@/sanity/queries/home";
 
 function Intro(props: { title: string | null | undefined; description: any }) {
   const title = props.title || demo.title;

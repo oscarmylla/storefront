@@ -1,4 +1,5 @@
 import { Button } from "@/storefront/components/ui/button";
+import { cn } from "@/storefront/lib/utils";
 import Link from "next/link";
 
 export function CategoryNavigationPill({
@@ -16,7 +17,12 @@ export function CategoryNavigationPill({
     <Button
       variant={isCurrent ? "default" : "outline"}
       asChild
-      className="rounded-full text-base gap-1.5 drop-shadow-mylla"
+      className={cn(
+        "rounded-full text-base gap-1.5 md:text-sm h-11 px-5 md:h-10 md:px-4",
+        {
+          "text-foreground/75": !isCurrent,
+        }
+      )}
     >
       <Link href={href}>
         {title}

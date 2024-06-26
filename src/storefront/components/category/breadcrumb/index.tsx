@@ -35,7 +35,7 @@ export function CategoryBreadcrumb({
           </React.Fragment>
         ))}
         <BreadcrumbSeparator />
-        <BreadcrumbPage className="max-w-20 truncate md:max-w-none">
+        <BreadcrumbPage>
           {categories[categories.length - 1].title}
         </BreadcrumbPage>
       </BreadcrumbList>

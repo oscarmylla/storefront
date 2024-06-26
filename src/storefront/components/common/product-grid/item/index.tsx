@@ -1,28 +1,23 @@
 import { Product } from "@/sanity.types";
-import {
-  getCart,
-  getProduct,
-  getProductAvailability,
-} from "@/storefront/lib/shopify";
-import Image from "next/image";
+import { getProductAvailability } from "@/storefront/lib/shopify";
 import Link from "next/link";
 import React from "react";
-import { ProductGridItemAddToCart } from "./add-to-cart";
 import { ProductGridItemImage } from "./image";
 import Price from "@/storefront/components/price";
 import { UnitPrice } from "@/storefront/components/unit-price";
+import { Badge } from "@/storefront/components/ui/badge";
+import { AddToCart } from "../../add-to-cart";
 
 export async function ProductGridItem({ product }: { product: Product }) {
   const { store } = product;
 
   if (!store) return null;
 
-  const { title, descriptionHtml, previewImageUrl, slug } = store;
+  const { title, previewImageUrl, slug, vendor } = store;
 
   if (!slug?.current) return null;
 
   const shopifyProduct = await getProductAvailability(slug.current);
-  const cart = await getCart();
 
   if (!shopifyProduct) return null;
 
@@ -34,26 +29,46 @@ export async function ProductGridItem({ product }: { product: Product }) {
   const selectedVariantQuantityAvailable = selectedVariant.quantityAvailable;
 
   return (
-    <li className="rounded-md overflow-hidden shadow-md flex flex-col">
-      <Link href={`/products/${slug?.current}`} scroll={false}>
+    <li className="rounded-xl overflow-hidden bg-card shadow-[0_2px_12px_rgba(66,64,61,.08)] flex flex-col">
+      <Link
+        href={`/products/${slug?.current}`}
+        scroll={false}
+        className="relative"
+      >
+        <div className="absolute top-1.5 left-1.5 right-1.5 z-10">
+          {!selectedVariant.availableForSale && (
+            <Badge variant="secondary" className="font-medium bg-amber-100">
+              Slutsåld
+            </Badge>
+          )}
+        </div>
+        <div className="absolute bottom-2 left-0 right-0 z-10 text-center">
+          {vendor && (
+            <Badge variant="secondary" className="font-medium">
+              {vendor}
+            </Badge>
+          )}
+        </div>
         <ProductGridItemImage previewImageUrl={previewImageUrl} title={title} />
       </Link>
-      <div className="py-3.5 px-3 sm:px-5 flex-1 flex flex-col">
+      <div className="p-3 sm:p-4 flex-1 flex flex-col gap-1 pt-2 sm:pt-3">
         <Link
           href={`/products/${slug?.current}`}
           scroll={false}
-          className="space-y-2 mb-auto"
+          className="space-y-2 md:space-y-3 mb-auto"
         >
-          <div>
-            <h2 className="font-semibold">{title}</h2>
-            <p>Sverige 270g</p>
+          <div className="space-y-0.5">
+            <h2 className="font-bold font-serif text-sm sm:text-[0.95rem]">
+              {title}
+            </h2>
+            <p className="text-sm text-muted-foreground">Sverige 270g</p>
           </div>
 
-          <div>
+          <div className="space-y-0.5">
             <Price
               amount={selectedVariant.price.amount}
               currencyCode={selectedVariant.price.currencyCode}
-              className="font-semibold"
+              className="font-bold font-serif text-sm text-[1rem]"
             />
             {selectedVariant.unitPrice &&
               selectedVariant.unitPriceMeasurement && (
@@ -63,13 +78,13 @@ export async function ProductGridItem({ product }: { product: Product }) {
                   quantityUnit={
                     selectedVariant.unitPriceMeasurement.quantityUnit
                   }
+                  className="text-sm text-muted-foreground"
                 />
               )}
           </div>
         </Link>
-        <ProductGridItemAddToCart
+        <AddToCart
           selectedVariantId={selectedVariantId}
-          cart={cart}
           availableForSale={shopifyProduct?.availableForSale}
           quantityAvailable={selectedVariantQuantityAvailable}
         />

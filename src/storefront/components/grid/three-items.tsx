@@ -25,7 +25,7 @@ function ThreeItemGridItem({
         href={`/products/${item.handle}`}
       >
         <GridTileImage
-          src={item.featuredImage.url}
+          src={item.featuredImage?.url}
           fill
           sizes={
             size === "full"

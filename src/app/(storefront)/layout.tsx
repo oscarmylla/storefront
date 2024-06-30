@@ -84,7 +84,7 @@ export default async function RootLayout({
         )}
       >
         <ReactQueryProvider>
-          <CartProvider>
+          <CartProvider cart={cart}>
             <section className="min-h-screen">
               {draftMode().isEnabled && <AlertBanner />}
               <Header />

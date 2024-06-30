@@ -14,13 +14,15 @@ export function useCart() {
 
 export default function CartProvider({
   children,
+  cart,
 }: {
   children: React.ReactNode;
+  cart?: Cart;
 }) {
-  const { data } = useQuery<Cart | undefined>({
-    queryKey: [TAGS.cart],
-    queryFn: () => getCart(),
-  });
+  // const { data, isFetching } = useQuery<Cart | undefined>({
+  //   queryKey: [TAGS.cart],
+  //   queryFn: () => getCart(),
+  // });
 
-  return <CartContext.Provider value={data}>{children}</CartContext.Provider>;
+  return <CartContext.Provider value={cart}>{children}</CartContext.Provider>;
 }

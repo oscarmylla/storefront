@@ -8,7 +8,7 @@ export default function Layout({
   return (
     <>
       {modal}
-      {children}
+      <div className="py-7 md:py-10 container">{children}</div>
     </>
   );
 }

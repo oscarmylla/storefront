@@ -12,7 +12,9 @@ export function CategoryNavigationPills({
   depth: number;
 }) {
   const { category_children, title, slug, product_count } = category;
-  const isCurrent = slug?.current === slugs[slugs.length - 1];
+  const isCurrent = slug?.current
+    ? slug.current === slugs[slugs.length - 1]
+    : false;
   const href = `/categories/${slugs.slice(0, depth).join("/")}`;
   const hasChildren = category_children.length > 0;
 
@@ -32,7 +34,9 @@ export function CategoryNavigationPills({
         {category_children.map((child) => {
           const { _id, title, slug, product_count } = child;
 
-          const isCurrent = slug?.current === slugs[depth];
+          const isCurrent = slug?.current
+            ? slug.current === slugs[depth]
+            : false;
           const href = `/categories/${slugs.slice(0, depth).join("/")}/${slug?.current}`;
 
           return (

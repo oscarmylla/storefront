@@ -46,11 +46,13 @@ export async function getCategoriesByPath({
 
 export function getCategoryProducts({
    id,
+   order = "title"
 }: {
    id: string;
+   order?: string;
 }) {
    return sanityFetch<Product[]>({
       query: categoryProductsQuery,
-      params: { id },
+      params: { id, order },
    });
 }

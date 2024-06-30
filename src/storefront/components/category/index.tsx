@@ -10,14 +10,16 @@ export default function CategoryMain({
   params,
   categories,
   category,
+  order,
 }: {
   category: Category;
   params: { category: string[] };
   categories: CategoryWithChildrenAndProductCount[];
+  order?: string;
 }) {
   const rootCategory = categories[0];
   return (
-    <div className="container py-7">
+    <section>
       <div className="space-y-6">
         <div className="space-y-3">
           <CategoryBreadcrumb categories={categories} slugs={params.category} />
@@ -28,7 +30,7 @@ export default function CategoryMain({
         <CategoryNavigation categories={categories} slugs={params.category} />
         <CategoryControls />
       </div>
-      <CategoryProducts id={category._id} />
-    </div>
+      <CategoryProducts id={category._id} order={order} />
+    </section>
   );
 }

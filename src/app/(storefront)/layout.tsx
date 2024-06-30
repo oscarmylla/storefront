@@ -20,6 +20,9 @@ import { resolveOpenGraphImage } from "@/sanity/utils/resolveOpenGraphImage";
 import { cn } from "@/storefront/lib/utils";
 import { Footer } from "@/storefront/components/layout/footer";
 import { Header } from "@/storefront/components/layout/header";
+import { ReactQueryProvider } from "@/storefront/providers/react-query";
+import CartProvider from "@/storefront/providers/cart";
+import { getCart } from "@/storefront/lib/shopify";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await sanityFetch<SettingsQueryResult>({
@@ -64,30 +67,37 @@ const fontSerif = FontSerif({
   weight: ["400", "500", "600", "700", "800"],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cart = await getCart();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-background text-foreground font-sans antialiased",
+          "min-h-screen bg-[#fdfdfd] text-foreground font-sans antialiased",
           fontSans.variable,
           fontSerif.variable
         )}
       >
-        <section className="min-h-screen">
-          {draftMode().isEnabled && <AlertBanner />}
-          <Header />
-          <main>{children}</main>
-          <Suspense>
-            <Footer />
-          </Suspense>
-        </section>
-        {draftMode().isEnabled && <VisualEditing />}
-        <SpeedInsights />
+        <ReactQueryProvider>
+          <CartProvider>
+            <section className="min-h-screen">
+              {draftMode().isEnabled && <AlertBanner />}
+              <Header />
+
+              <main>{children}</main>
+              <Suspense>
+                <Footer />
+              </Suspense>
+            </section>
+            {draftMode().isEnabled && <VisualEditing />}
+            <SpeedInsights />
+          </CartProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

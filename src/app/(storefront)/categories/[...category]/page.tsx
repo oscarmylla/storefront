@@ -27,8 +27,12 @@ export default async function CategoryPage({
   searchParams,
 }: {
   params: { category: string[] };
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: {
+    order?: string;
+  };
 }) {
+  const order = searchParams?.order;
+
   const categories = await getCategoriesByPath({
     slugs: params.category,
   });
@@ -38,6 +42,11 @@ export default async function CategoryPage({
   const category = categories[categories.length - 1];
 
   return (
-    <CategoryMain params={params} category={category} categories={categories} />
+    <CategoryMain
+      params={params}
+      category={category}
+      categories={categories}
+      order={order}
+    />
   );
 }

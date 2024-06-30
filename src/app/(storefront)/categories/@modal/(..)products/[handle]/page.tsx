@@ -64,7 +64,7 @@ export default async function ProductPage({
     "@type": "Product",
     name: shopifyProduct.title,
     description: shopifyProduct.description,
-    image: shopifyProduct.featuredImage.url,
+    image: shopifyProduct.featuredImage?.url,
     offers: {
       "@type": "AggregateOffer",
       availability: shopifyProduct.availableForSale

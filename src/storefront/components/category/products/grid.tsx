@@ -1,8 +1,16 @@
 import { getCategoryProducts } from "@/sanity/data/category";
 import { ProductGrid } from "@/storefront/components/common/product-grid";
 
-export async function CategoryProductGrid({ id }: { id: string }) {
-  const products = await getCategoryProducts({ id });
+export async function CategoryProductGrid({
+  id,
+  className,
+  order,
+}: {
+  id: string;
+  className: string;
+  order?: string;
+}) {
+  const products = await getCategoryProducts({ id, order });
 
-  return <ProductGrid products={products} className="py-10" />;
+  return <ProductGrid products={products} className={className} />;
 }

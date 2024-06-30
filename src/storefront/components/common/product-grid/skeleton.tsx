@@ -1,9 +1,10 @@
+import { cn } from "@/storefront/lib/utils";
 import { productGridClasses } from ".";
 import { ProductGridItemSkeleton } from "./item/skeleton";
 
-export function ProductGridSkeleton() {
+export function ProductGridSkeleton({ className }: { className?: string }) {
   return (
-    <ul className={productGridClasses}>
+    <ul className={cn(productGridClasses, className)}>
       {[...Array(8)].map((_, i) => (
         <ProductGridItemSkeleton key={i} />
       ))}

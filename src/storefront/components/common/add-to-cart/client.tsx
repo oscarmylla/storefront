@@ -3,23 +3,23 @@
 import React from "react";
 import { Loader2, Minus, Plus } from "lucide-react";
 import { AddToCartWrapper } from "./wrapper";
-import { Cart } from "@/storefront/lib/shopify/types";
 import { AddToCartButton } from "./button";
 import { ButtonProps } from "../../ui/button";
+import { useCart } from "@/storefront/providers/cart";
 
 export function AddToCartClient({
   selectedVariantId,
   availableForSale,
   quantityAvailable = 1000,
-  cart,
   size = "icon",
 }: {
   selectedVariantId: string;
   availableForSale?: boolean;
   quantityAvailable?: number;
-  cart?: Cart;
   size?: ButtonProps["size"];
 }) {
+  const cart = useCart();
+
   return (
     <AddToCartWrapper
       selectedVariantId={selectedVariantId}
@@ -32,6 +32,8 @@ export function AddToCartClient({
             <AddToCartButton disabled size={size}>
               {size === "icon" ? (
                 <Plus className="size-5" />
+              ) : size === "sm" ? (
+                <Plus className="size-4" />
               ) : (
                 <>
                   <Plus className="size-5" />
@@ -49,6 +51,8 @@ export function AddToCartClient({
                 <Loader2 className="size-4 animate-spin" />
               ) : size === "icon" ? (
                 <Plus className="size-5" />
+              ) : size === "sm" ? (
+                <Plus className="size-4" />
               ) : (
                 <>
                   <Plus className="size-5" />

@@ -4,6 +4,9 @@ import {
   Drawer,
   DrawerContent,
   DrawerClose,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
 } from "@/storefront/components/ui/drawer";
 import { useRouter } from "next/navigation";
 import { ScrollArea } from "../../ui/scroll-area";
@@ -19,8 +22,14 @@ export function ProductModal({ children }: { children: React.ReactNode }) {
         if (!open) router.back();
       }}
     >
+      <DrawerHeader className="sr-only">
+        <DrawerTitle>Produktsida</DrawerTitle>
+        <DrawerDescription>
+          Här kan du se mer information om produkten.
+        </DrawerDescription>
+      </DrawerHeader>
       <DrawerContent className="h-[95%]">
-        <DrawerClose>
+        <DrawerClose asChild>
           <Button
             size="icon"
             variant="outline"
@@ -29,9 +38,7 @@ export function ProductModal({ children }: { children: React.ReactNode }) {
             <X className="size-6" />
           </Button>
         </DrawerClose>
-        <ScrollArea className="h-auto overflow-y-auto">
-          <div className="container">{children}</div>
-        </ScrollArea>
+        <ScrollArea className="h-auto overflow-y-auto">{children}</ScrollArea>
       </DrawerContent>
     </Drawer>
   );

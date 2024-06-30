@@ -152,7 +152,7 @@ export type ShopifyProduct = {
     minVariantPrice: Money;
   };
   variants: Connection<ProductVariant>;
-  featuredImage: Image;
+  featuredImage?: Image;
   images: Connection<Image>;
   seo: SEO;
   tags: string[];
@@ -300,6 +300,19 @@ export type ShopifyProductsOperation = {
     reverse?: boolean;
     sortKey?: string;
     first?: number;
+  };
+};
+
+export type ShopifyProductSearchOperation = {
+  data: {
+    search: Connection<ShopifyProduct>;
+  };
+  variables: {
+    query: string;
+    first: number;
+    reverse?: boolean;
+    sortKey: string;
+    types?: string[];
   };
 };
 

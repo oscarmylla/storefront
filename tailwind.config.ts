@@ -19,8 +19,9 @@ const config = {
         sans: ["var(--font-sans)", ...fontFamily.sans],
         serif: ["var(--font-serif)", ...fontFamily.serif],
       },
-      dropShadow: {
+      boxShadow: {
         'mylla': '4px 5px 0 rgba(0, 0, 0, 1)',
+        'sm': "0 2px 12px rgba(66, 64, 61, .08)"
       },
       colors: {
         border: "hsl(var(--border))",

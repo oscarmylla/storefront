@@ -31,9 +31,8 @@ export function ProductGallery({
               <Image
                 src={image.src}
                 alt={image.altText}
-                width={1000}
-                height={1000}
                 className="w-full rounded-md object-cover"
+                fill
               />
             </div>
           </CarouselItem>

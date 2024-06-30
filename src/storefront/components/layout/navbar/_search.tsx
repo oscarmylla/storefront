@@ -26,10 +26,7 @@ export default function Search() {
   }
 
   return (
-    <form
-      onSubmit={onSubmit}
-      className="w-max-[550px] relative w-full lg:w-80 xl:w-full"
-    >
+    <form onSubmit={onSubmit} className="relative lg:max-w-lg flex-1">
       <Input
         key={searchParams?.get("q")}
         type="text"
@@ -37,7 +34,7 @@ export default function Search() {
         placeholder="Sök efter produkter..."
         autoComplete="off"
         defaultValue={searchParams?.get("q") || ""}
-        className="w-full"
+        className="w-full rounded-full"
       />
       <div className="absolute right-0 top-0 mr-3 flex h-full items-center">
         <MagnifyingGlassIcon className="h-4" />

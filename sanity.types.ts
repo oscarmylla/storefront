@@ -1113,7 +1113,7 @@ export type SanityAssistSchemaTypeField = {
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./src/sanity/queries/category.ts
 // Variable: categoriesQuery
-// Query: *[_type == "category" && !defined(parent)]{    ...,    "product_count": count(*[_type=="product" && references(^._id)])}
+// Query: *[_type == "category" && !defined(parent)]{    ...,    "product_count": count(*[_type=="product" && references(^._id) && store.status == "active"]),    "thumbnails": *[_type=="product" && references(^._id)][0...5].store.previewImageUrl}
 export type CategoriesQueryResult = Array<{
   _id: string;
   _type: "category";
@@ -1136,6 +1136,7 @@ export type CategoriesQueryResult = Array<{
     [internalGroqTypeReferenceTo]?: "category";
   }>;
   product_count: number;
+  thumbnails: Array<string | null>;
 }>;
 // Variable: categoriesByPathQuery
 // Query: *[_type == "category" && slug.current in $slugs]{    ...,    "product_count": count(*[_type == "product" && references(^._id) && store.status == "active"]),    "category_children": *[_type=="category" && parent._ref == ^._id]{      ...,      "product_count": count(*[_type == "product" && references(^._id) && store.status == "active"])    }}
@@ -1186,7 +1187,7 @@ export type CategoriesByPathQueryResult = Array<{
   }>;
 }>;
 // Variable: categoryProductsQuery
-// Query: *[_type == "product" && references($id) && store.status == "active"] | order(defined(sales) desc, sales desc, _createdAt desc){  ...,  "sales": null}
+// Query: *[_type == "product" && references($id) && store.status == "active"] | order(select(  $order == "title" => 'sales asc')){  ...,  "sales": null}
 export type CategoryProductsQueryResult = Array<{
   _id: string;
   _type: "product";

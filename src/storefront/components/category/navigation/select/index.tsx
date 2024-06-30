@@ -38,7 +38,8 @@ export function CategoryNavigationSelect({
           variant="outline"
           size="lg"
         >
-          {selectedChild ? selectedChild.title : "Alla"} ({product_count})
+          {selectedChild ? selectedChild.title : "Alla"} (
+          {selectedChild ? selectedChild.product_count : product_count})
           <ChevronDown className="size-5 group-data-[state=open]:rotate-180" />
         </Button>
       </CollapsibleTrigger>

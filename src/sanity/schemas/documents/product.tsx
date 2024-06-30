@@ -4,7 +4,7 @@ import ProductHiddenInput from "@/sanity/components/inputs/product-hidden";
 import ShopifyDocumentStatus from "@/sanity/components/media/shopify-document-status";
 import { defineField, defineType } from "sanity";
 import { getPriceRange } from "@/sanity/utils/getPriceRange";
-import { GROUPS } from "@/sanity/constants";
+import { GROUPS, SANITY_API_VERSION } from "@/sanity/constants";
 
 export const product = defineType({
   name: "product",
@@ -65,6 +65,20 @@ export const product = defineType({
       name: "category",
       type: "reference",
       to: [{ type: "category" }],
+      group: "editorial",
+      options: {
+        filter: async ({ getClient }) => {
+          const client = getClient({ apiVersion: SANITY_API_VERSION });
+          const categoryBranchIds = await client.fetch(
+            '*[_type == "category" && defined(parent._ref)].parent._ref'
+          );
+
+          return {
+            filter: "!(_id in $categoryBranchIds)",
+            params: { categoryBranchIds },
+          };
+        },
+      },
     }),
     defineField({
       name: "categoryPath",
@@ -74,6 +88,7 @@ export const product = defineType({
       description:
         "This array contains references to all parent categories, maintaining order from the root.",
       readOnly: true,
+      group: "editorial",
     }),
     defineField({
       name: "sales",

@@ -44,20 +44,8 @@ interface CartSheetProps {
 
 export function CartSheet({ cart }: CartSheetProps) {
   const [open, setOpen] = useState(false);
-  const quantityRef = useRef(cart?.totalQuantity);
-  const pathname = usePathname();
-
-  useEffect(() => {
-    if (cart?.totalQuantity !== quantityRef.current) {
-      if (!open && pathname !== "/cart") {
-        setOpen(true);
-      }
-      quantityRef.current = cart?.totalQuantity;
-    }
-  }, [open, cart?.totalQuantity, quantityRef, pathname]);
 
   const zip = cart?.buyerIdentity?.deliveryAddressPreferences?.[0]?.zip;
-
   const showEmpty = !cart || cart.lines.length === 0;
   const showNotEmpty = !showEmpty && zip;
   const showZip = !zip && !showEmpty;

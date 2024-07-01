@@ -18,6 +18,30 @@ const cartFragment = /* GraphQL */ `
         currencyCode
       }
     }
+    buyerIdentity{
+      countryCode
+      deliveryAddressPreferences{
+        ... on MailingAddress {
+            address1
+            address2
+            city
+            company
+            country
+            firstName
+            lastName
+            phone
+            province
+            zip
+        }
+      }
+      email
+      phone
+      walletPreferences
+    }
+    attributes {
+      key
+      value
+    }
     lines(first: 100) {
       edges {
         node {
@@ -25,6 +49,14 @@ const cartFragment = /* GraphQL */ `
           quantity
           cost {
             totalAmount {
+              amount
+              currencyCode
+            }
+            compareAtAmountPerQuantity{
+              amount
+              currencyCode
+            }
+            amountPerQuantity{
               amount
               currencyCode
             }
@@ -36,6 +68,18 @@ const cartFragment = /* GraphQL */ `
               selectedOptions {
                 name
                 value
+              }
+              sku
+              unitPriceMeasurement{
+                measuredType
+                quantityUnit
+                quantityValue
+                referenceUnit
+                referenceValue
+              }
+              unitPrice {
+                amount
+                currencyCode
               }
               product {
                 ...product

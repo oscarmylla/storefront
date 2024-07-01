@@ -12,6 +12,7 @@ const productFragment = /* GraphQL */ `
     description
     descriptionHtml
     vendor
+    productType
     options {
       id
       name

@@ -1,6 +1,5 @@
 "use client";
 
-import { Dialog, Transition } from "@headlessui/react";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import Price from "@/storefront/components/price";
 import { DEFAULT_OPTION } from "@/storefront/lib/constants";
@@ -13,7 +12,7 @@ import CloseCart from "./close-cart";
 import { DeleteItemButton } from "./delete-item-button";
 import { EditItemQuantityButton } from "./edit-item-quantity-button";
 import OpenCart from "./open-cart";
-import { Button } from "../ui/button";
+import { Button } from "@/storefront/components/ui/button";
 import {
   Sheet,
   SheetContent,

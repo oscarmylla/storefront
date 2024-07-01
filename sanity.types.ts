@@ -1382,6 +1382,41 @@ export type PostQueryResult = {
   } | null;
 } | null;
 // Source: ./src/sanity/queries/product.ts
+// Variable: productsQuery
+// Query: *[_type == "product"][0...40]
+export type ProductsQueryResult = Array<{
+  _id: string;
+  _type: "product";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  hidden?: string;
+  titleProxy?: ProxyString;
+  slugProxy?: ProxyString;
+  colorTheme?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "colorTheme";
+  };
+  body?: PortableText;
+  store?: ShopifyProduct;
+  seo?: Seo;
+  category?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
+  categoryPath?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
+  }>;
+  sales?: number;
+}>;
 // Variable: productByHandleQuery
 // Query: *[_type == "product" && store.slug.current == $handle][0]{   ...,   categoryPath[]->}
 export type ProductByHandleQueryResult = {

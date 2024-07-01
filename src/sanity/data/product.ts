@@ -1,7 +1,13 @@
-import { ProductByHandleQueryResult, ProductsByIdsQueryResult } from "@/sanity.types";
+import { ProductByHandleQueryResult, ProductsByIdsQueryResult, ProductsQueryResult } from "@/sanity.types";
 import { sanityFetch } from "../lib/fetch";
-import { productByHandleQuery, productsByIdsQuery } from "../queries/product";
+import { productByHandleQuery, productsByIdsQuery, productsQuery } from "../queries/product";
 import { getProductRecommendationIds } from "@/storefront/lib/shopify";
+
+export async function getProducts() {
+   return sanityFetch<ProductsQueryResult>({
+      query: productsQuery,
+   });
+}
 
 export async function getProductByHandle({
    handle,

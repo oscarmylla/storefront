@@ -43,3 +43,30 @@ export const removeFromCartMutation = /* GraphQL */ `
   }
   ${cartFragment}
 `;
+
+export const updateAttributesCartMutation = /* GraphQL */ `
+  mutation cartAttributesUpdate($cartId: ID!, $attributes: [AttributeInput!]!) @inContext(country: SE, language: SV){
+    cartAttributesUpdate(cartId: $cartId, attributes: $attributes) {
+      cart {
+        ...cart
+      }
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+  ${cartFragment}
+`;
+
+
+export const updateBuyerIdentityCartMutation = /* GraphQL */ `
+  mutation updateBuyerIdentityCart($cartId: ID!, $buyerIdentity: CartBuyerIdentityInput!) @inContext(country: SE, language: SV){
+    cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
+      cart {
+        ...cart
+      }
+    }
+  }
+  ${cartFragment}
+`;

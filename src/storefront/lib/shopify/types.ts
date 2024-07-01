@@ -24,6 +24,8 @@ export type CartItem = {
   quantity: number;
   cost: {
     totalAmount: Money;
+    compareAtAmountPerQuantity?: Money;
+    amountPerQuantity: Money;
   };
   merchandise: {
     id: string;
@@ -32,6 +34,15 @@ export type CartItem = {
       name: string;
       value: string;
     }[];
+    sku?: string;
+    unitPrice?: Money;
+    unitPriceMeasurement?: {
+      measuredType: string;
+      quantityUnit: string;
+      quantityValue: number;
+      referenceUnit: string;
+      referenceValue: number;
+    };
     product: Product;
   };
 };
@@ -120,9 +131,43 @@ export type ProductVariant = {
   };
 };
 
+export type BuyerIdentity = {
+  countryCode?: string,
+  deliveryAddressPreferences?: [
+    {
+      address1?: string,
+      address2?: string,
+      city?: string,
+      company?: string,
+      country?: string,
+      firstName?: string,
+      lastName?: string,
+      phone?: string,
+      province?: string,
+      zip?: string
+    }
+  ],
+  email?: string,
+  phone?: string,
+  walletPreferences?: [
+    string
+  ]
+}
+
 export type SEO = {
   title: string;
   description: string;
+};
+
+export type ShopifyGid = Pick<URL, 'search' | 'searchParams' | 'hash'> & {
+  id: string;
+  resource: string | null;
+  resourceId: string | null;
+};
+
+export type ShopifyCartAttribute = {
+  key: string;
+  value: string;
 };
 
 export type ShopifyCart = {
@@ -135,6 +180,8 @@ export type ShopifyCart = {
   };
   lines: Connection<CartItem>;
   totalQuantity: number;
+  buyerIdentity: BuyerIdentity;
+  attributes: ShopifyCartAttribute[];
 };
 
 export type ShopifyCollection = {
@@ -159,6 +206,7 @@ export type ShopifyProduct = {
     maxVariantPrice: Money;
     minVariantPrice: Money;
   };
+  productType?: string;
   variants: Connection<ProductVariant>;
   featuredImage?: Image;
   images: Connection<Image>;
@@ -192,6 +240,70 @@ export type ShopifyAddToCartOperation = {
       merchandiseId: string;
       quantity: number;
     }[];
+  };
+};
+
+export type AttributePayload = ShopifyCartAttribute[]
+
+export type ShopifyUpdateCartAttributesOperation = {
+  data: {
+    cartAttributesUpdate: {
+      cart: ShopifyCart;
+    };
+  };
+  variables: {
+    cartId: string;
+    attributes: AttributePayload;
+  };
+};
+
+export type ShopifyUpdateCartLinesOperation = {
+  data: {
+    cartLinesUpdate: {
+      cart: ShopifyCart;
+    };
+  };
+  variables: {
+    cartId: string;
+    lines: {
+      id: string;
+      merchandiseId: string;
+      quantity: number;
+    }[];
+  };
+};
+
+export type BuyerIdentityPayload = {
+  countryCode?: string,
+  customerAccessToken?: string,
+  deliveryAddressPreferences?: [
+    {
+      customerAddressId?: string,
+      deliveryAddress?: {
+        address1?: string,
+        address2?: string,
+        city?: string,
+        company?: string,
+        country?: string,
+        firstName?: string,
+        lastName?: string,
+        phone?: string,
+        province?: string,
+        zip?: string
+      }
+    }
+  ],
+}
+
+export type ShopifyUpdateCartBuyerIdentityOperation = {
+  data: {
+    cartBuyerIdentityUpdate: {
+      cart: ShopifyCart;
+    };
+  };
+  variables: {
+    cartId: string;
+    buyerIdentity: BuyerIdentityPayload;
   };
 };
 

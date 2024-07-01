@@ -1,15 +1,14 @@
-import Cart from "@/storefront/components/cart";
-import OpenCart from "@/storefront/components/cart/open-cart";
 import Link from "next/link";
 import { Suspense } from "react";
 import MobileMenu from "./mobile-menu";
 import { SearchSkeleton } from "./_search";
 import logo from "@/public/images/logo.webp";
 import Image from "next/image";
-import { Logo } from "@/storefront/svgs/logo";
 import { Button } from "../../ui/button";
 import { Badge, Cherry, Tractor, Utensils } from "lucide-react";
 import { Search } from "./search";
+import { Cart } from "../cart";
+import OpenCart from "../_cart/open-cart";
 
 const { SITE_NAME } = process.env;
 

@@ -10,7 +10,9 @@ import {
   addToCartMutation,
   createCartMutation,
   editCartItemsMutation,
-  removeFromCartMutation
+  removeFromCartMutation,
+  updateAttributesCartMutation,
+  updateBuyerIdentityCartMutation
 } from './mutations/cart';
 import { getCartQuery } from './queries/cart';
 import {
@@ -28,6 +30,8 @@ import {
   searchProductsQuery
 } from './queries/product';
 import {
+  AttributePayload,
+  BuyerIdentityPayload,
   Cart,
   Collection,
   Connection,
@@ -54,11 +58,17 @@ import {
   ShopifyProductSearchOperation,
   ShopifyProductsOperation,
   ShopifyRemoveFromCartOperation,
+  ShopifyUpdateCartAttributesOperation,
+  ShopifyUpdateCartBuyerIdentityOperation,
+  ShopifyUpdateCartLinesOperation,
   ShopifyUpdateCartOperation,
   ShopifyWebhookOrder
 } from './types';
 import { waitUntil } from '@vercel/functions';
 import { incrementProductSales } from '@/sanity/mutations/product';
+import { FormErrors } from '@/storefront/types/form';
+import { UpdateBuyerIdentityFormValues, UpdateBuyerIdentitySchema } from '../zod/shopify';
+import { formatZip } from '@/storefront/utils/zip';
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN
   ? ensureStartsWith(process.env.SHOPIFY_STORE_DOMAIN, 'https://')
@@ -555,4 +565,46 @@ export async function incrementSales(req: NextRequest): Promise<NextResponse> {
   }
 
   return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
+}
+
+export async function updateCartAttributes(cartId: string, attributes: AttributePayload): Promise<Cart> {
+  const res = await shopifyFetch<ShopifyUpdateCartAttributesOperation>({
+    query: updateAttributesCartMutation,
+    variables: {
+      cartId,
+      attributes
+    },
+    cache: 'no-store'
+  });
+
+  return reshapeCart(res.body.data.cartAttributesUpdate.cart);
+}
+
+export async function updateCartLines(
+  cartId: string,
+  lines: { id: string; merchandiseId: string; quantity: number, attributes?: { key: string, value: string }[] }[]
+): Promise<Cart> {
+  const res = await shopifyFetch<ShopifyUpdateCartLinesOperation>({
+    query: editCartItemsMutation,
+    variables: {
+      cartId,
+      lines
+    },
+    cache: 'no-store'
+  });
+
+  return reshapeCart(res.body.data.cartLinesUpdate.cart);
+}
+
+export async function updateCartBuyerIdentity(cartId: string, buyerIdentity: BuyerIdentityPayload): Promise<Cart> {
+  const res = await shopifyFetch<ShopifyUpdateCartBuyerIdentityOperation>({
+    query: updateBuyerIdentityCartMutation,
+    variables: {
+      cartId,
+      buyerIdentity
+    },
+    cache: 'no-store'
+  });
+
+  return reshapeCart(res.body.data.cartBuyerIdentityUpdate.cart);
 }

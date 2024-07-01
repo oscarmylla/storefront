@@ -49,13 +49,20 @@ export const getProductRecommendationsQuery = /* GraphQL */ `
 `;
 
 export const searchProductsQuery = /* GraphQL */ `
-  query searchProducts($query: String!, $first: Int, $types: [SearchType!] = [PRODUCT], $sortKey: SearchSortKeys, $reverse: Boolean = false) {
-    search(query: $query, first: $first, types: $types, sortKey: $sortKey, reverse: $reverse, ) {
+  query searchProducts($query: String!, $first: Int, $types: [SearchType!] = [PRODUCT], $sortKey: SearchSortKeys, $reverse: Boolean = false, $after: String, $before: String) {
+    search(query: $query, first: $first, types: $types, sortKey: $sortKey, reverse: $reverse, after: $after, before: $before) {
       edges {
         node {
             ...product
         }
       }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        endCursor
+        startCursor
+      }
+      totalCount
     }
   }
   ${productFragment}

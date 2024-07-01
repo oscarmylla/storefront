@@ -1,7 +1,7 @@
 import "../globals.css";
 
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { VisualEditing, toPlainText } from "next-sanity";
 import {
   Poppins as FontSans,
@@ -54,6 +54,15 @@ export async function generateMetadata(): Promise<Metadata> {
     },
   };
 }
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  // Also supported by less commonly used
+  // interactiveWidget: 'resizes-visual',
+};
 
 const fontSans = FontSans({
   subsets: ["latin"],

@@ -59,7 +59,10 @@ export default async function Navbar() {
             </Link>
           </Button>
           <Button variant="link">
-            <Link href="/categories" className="flex item-center gap-1.5">
+            <Link
+              href="/collections/kort-bast-fore-datum"
+              className="flex item-center gap-1.5"
+            >
               <Badge className="size-5" />
               Erbjudanden
             </Link>

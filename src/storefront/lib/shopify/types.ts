@@ -12,6 +12,13 @@ export type Cart = Omit<ShopifyCart, 'lines'> & {
   lines: CartItem[];
 };
 
+export type PageInfo = {
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  endCursor: string;
+  startCursor: string;
+};
+
 export type CartItem = {
   id: string;
   quantity: number;
@@ -147,6 +154,7 @@ export type ShopifyProduct = {
   description: string;
   descriptionHtml: string;
   options: ProductOption[];
+  vendor: string;
   priceRange: {
     maxVariantPrice: Money;
     minVariantPrice: Money;
@@ -305,7 +313,10 @@ export type ShopifyProductsOperation = {
 
 export type ShopifyProductSearchOperation = {
   data: {
-    search: Connection<ShopifyProduct>;
+    search: Connection<ShopifyProduct> & {
+      pageInfo: PageInfo
+      totalCount: number
+    };
   };
   variables: {
     query: string;
@@ -313,6 +324,8 @@ export type ShopifyProductSearchOperation = {
     reverse?: boolean;
     sortKey: string;
     types?: string[];
+    after?: string;
+    before?: string;
   };
 };
 

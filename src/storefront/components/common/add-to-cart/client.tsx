@@ -30,10 +30,8 @@ export function AddToCartClient({
         if (!availableForSale) {
           return (
             <AddToCartButton disabled size={size}>
-              {size === "icon" ? (
+              {size === "icon" || size === "sm" ? (
                 <Plus className="size-5" />
-              ) : size === "sm" ? (
-                <Plus className="size-4" />
               ) : (
                 <>
                   <Plus className="size-5" />
@@ -49,10 +47,8 @@ export function AddToCartClient({
             <AddToCartButton onClick={increment} disabled={loading} size={size}>
               {loading ? (
                 <Loader2 className="size-4 animate-spin" />
-              ) : size === "icon" ? (
+              ) : size === "icon" || size === "sm" ? (
                 <Plus className="size-5" />
-              ) : size === "sm" ? (
-                <Plus className="size-4" />
               ) : (
                 <>
                   <Plus className="size-5" />
@@ -69,11 +65,11 @@ export function AddToCartClient({
               onClick={decrement}
               className="rounded-r-none"
               variant="outline"
-              size={size}
+              size={size === "sm" ? size : "icon"}
             >
               <Minus className="size-4" />
             </AddToCartButton>
-            <span className="flex items-center text-center justify-center w-10 shrink-0 border border-x-0">
+            <span className="flex items-center text-center justify-center w-10 shrink-0 border border-x-0 bg-background">
               {loading ? (
                 <Loader2 className="size-4 animate-spin" />
               ) : (
@@ -84,7 +80,7 @@ export function AddToCartClient({
               onClick={increment}
               className="rounded-l-none"
               variant="outline"
-              size={size}
+              size={size === "sm" ? size : "icon"}
             >
               <Plus className="size-5" />
             </AddToCartButton>

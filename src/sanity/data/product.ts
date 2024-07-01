@@ -27,3 +27,13 @@ export async function getProductRecommendations(id: string) {
       }
    });
 }
+
+export async function getProductsByIds(ids: string[]) {
+   const sanityIds = ids.map((id) => `shopifyProduct-${id.split("/").pop()}`);
+   return sanityFetch<ProductsByIdsQueryResult>({
+      query: productsByIdsQuery,
+      params: {
+         ids: sanityIds
+      }
+   });
+}

@@ -34,6 +34,7 @@ import {
   Image,
   Menu,
   Page,
+  PageInfo,
   Product,
   ShopifyAddToCartOperation,
   ShopifyCart,
@@ -464,12 +465,16 @@ export async function getProducts({
 
 export async function searchProducts({
   query,
-  first }
-  : {
-    query: string
-    first: number
-  }
-): Promise<Product[]> {
+  first,
+  after,
+  before
+}: {
+  query: string
+  first: number
+  after?: string
+  before?: string
+}
+): Promise<{ products: Product[], pageInfo: PageInfo, totalCount: number }> {
   const res = await shopifyFetch<ShopifyProductSearchOperation>({
     query: searchProductsQuery,
     tags: [TAGS.products],
@@ -478,11 +483,17 @@ export async function searchProducts({
       first,
       types: ['PRODUCT'],
       sortKey: 'RELEVANCE',
-      reverse: false
+      reverse: false,
+      after,
+      before
     }
   });
 
-  return reshapeProducts(removeEdgesAndNodes(res.body.data.search));
+  return {
+    products: reshapeProducts(removeEdgesAndNodes(res.body.data.search)),
+    pageInfo: res.body.data.search.pageInfo,
+    totalCount: res.body.data.search.totalCount
+  }
 }
 
 // This is called from `app/api/revalidate.ts` so providers can control revalidation logic.

@@ -7,6 +7,7 @@ import { product } from './product'
 import { settings } from './settings'
 import { category } from './category';
 import { categories } from './categories';
+import { productSeed } from './product_seed';
 
 /**
  * Structure overrides
@@ -52,6 +53,7 @@ export const structure: StructureResolver = (S, context) =>
       collection(S, context),
       product(S, context),
       S.divider(),
+      productSeed(S, context),
       colorTheme(S, context),
       S.divider(),
       settings(S, context),

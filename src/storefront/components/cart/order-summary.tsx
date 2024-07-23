@@ -6,8 +6,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { DEFAULT_OPTION } from "../../lib/constants";
 import Price from "@/storefront/components/price";
-import { EditItemQuantityButton } from "../layout/_cart/edit-item-quantity-button";
 import { cn } from "@/storefront/lib/utils";
+import { EditItemQuantityButton } from "../layout/cart/edit-item-quantity-button";
 
 export function OrderSummary({ cart }: { cart: Cart }) {
   return (

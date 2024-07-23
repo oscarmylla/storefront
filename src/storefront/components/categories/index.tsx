@@ -9,7 +9,7 @@ export default function CategoriesMain() {
       <div className="space-y-7 md:space-y-9">
         <div className="space-y-3">
           <CategoriesBreadcrumb />
-          <h1 className="text-3xl tracking-tight lg:text-4xl font-serif font-bold">
+          <h1 className="text-3xl tracking-tight lg:text-4xl font-bold">
             Handla efter kategori
           </h1>
         </div>

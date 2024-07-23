@@ -1,6 +1,6 @@
 import { CategoriesByPathQueryResult, CategoriesQueryResult, Product } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { categoriesByPathQuery, categoriesQuery, categoryProductsQuery } from "@/sanity/queries/category";
+import { categoriesByPathQuery, categoriesQuery } from "@/sanity/queries/category";
 import { TAGS } from "@/storefront/lib/sanity/constants";
 
 export async function getCategories() {
@@ -42,17 +42,4 @@ export async function getCategoriesByPath({
    if (!isValidPath) return null;
 
    return categories.reverse();
-}
-
-export function getCategoryProducts({
-   id,
-   order = "title"
-}: {
-   id: string;
-   order?: string;
-}) {
-   return sanityFetch<Product[]>({
-      query: categoryProductsQuery,
-      params: { id, order },
-   });
 }

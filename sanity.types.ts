@@ -650,6 +650,12 @@ export type Product = {
   body?: PortableText;
   store?: ShopifyProduct;
   seo?: Seo;
+  vendor?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "vendor";
+  };
   category?: {
     _ref: string;
     _type: "reference";
@@ -687,6 +693,41 @@ export type Category = {
     _key: string;
     [internalGroqTypeReferenceTo]?: "category";
   }>;
+};
+
+export type Vendor = {
+  _id: string;
+  _type: "vendor";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  blog?: VendorBlog;
+};
+
+export type VendorBlog = {
+  _type: "vendorBlog";
+  title?: string;
+  content?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+  quote?: string;
 };
 
 export type ShopifyProduct = {
@@ -1186,41 +1227,6 @@ export type CategoriesByPathQueryResult = Array<{
     product_count: number;
   }>;
 }>;
-// Variable: categoryProductsQuery
-// Query: *[_type == "product" && references($id) && store.status == "active"] | order(select(  $order == "title" => 'sales asc')){  ...,  "sales": null}
-export type CategoryProductsQueryResult = Array<{
-  _id: string;
-  _type: "product";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  hidden?: string;
-  titleProxy?: ProxyString;
-  slugProxy?: ProxyString;
-  colorTheme?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "colorTheme";
-  };
-  body?: PortableText;
-  store?: ShopifyProduct;
-  seo?: Seo;
-  category?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "category";
-  };
-  categoryPath?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "category";
-  }>;
-  sales: null;
-}>;
 // Variable: categoryPathQuery
 // Query: *[_type == "category" && _id == $id][0]{ path }
 export type CategoryPathQueryResult = {
@@ -1382,40 +1388,11 @@ export type PostQueryResult = {
   } | null;
 } | null;
 // Source: ./src/sanity/queries/product.ts
-// Variable: productsQuery
-// Query: *[_type == "product"][0...40]
-export type ProductsQueryResult = Array<{
+// Variable: paginatedProductsQueryTemplate
+// Query: *[_type == "product"]{   _id,   store}
+export type PaginatedProductsQueryTemplateResult = Array<{
   _id: string;
-  _type: "product";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  hidden?: string;
-  titleProxy?: ProxyString;
-  slugProxy?: ProxyString;
-  colorTheme?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "colorTheme";
-  };
-  body?: PortableText;
-  store?: ShopifyProduct;
-  seo?: Seo;
-  category?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "category";
-  };
-  categoryPath?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "category";
-  }>;
-  sales?: number;
+  store: ShopifyProduct | null;
 }>;
 // Variable: productByHandleQuery
 // Query: *[_type == "product" && store.slug.current == $handle][0]{   ...,   categoryPath[]->}
@@ -1437,6 +1414,12 @@ export type ProductByHandleQueryResult = {
   body?: PortableText;
   store?: ShopifyProduct;
   seo?: Seo;
+  vendor?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "vendor";
+  };
   category?: {
     _ref: string;
     _type: "reference";
@@ -1487,6 +1470,53 @@ export type ProductsByIdsQueryResult = Array<{
   body?: PortableText;
   store?: ShopifyProduct;
   seo?: Seo;
+  vendor?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "vendor";
+  };
+  category?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
+  categoryPath?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
+  }>;
+  sales?: number;
+}>;
+// Variable: productsByVendorQuery
+// Query: *[_type == "product" && store.vendor == $vendor]
+export type ProductsByVendorQueryResult = Array<{
+  _id: string;
+  _type: "product";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  hidden?: string;
+  titleProxy?: ProxyString;
+  slugProxy?: ProxyString;
+  colorTheme?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "colorTheme";
+  };
+  body?: PortableText;
+  store?: ShopifyProduct;
+  seo?: Seo;
+  vendor?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "vendor";
+  };
   category?: {
     _ref: string;
     _type: "reference";

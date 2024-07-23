@@ -1,4 +1,4 @@
-import { Product } from "@/sanity.types";
+import { PaginatedProductsQueryTemplateResult, Product } from "@/sanity.types";
 import { getProductAvailability } from "@/storefront/lib/shopify";
 import Link from "next/link";
 import React from "react";
@@ -8,7 +8,11 @@ import { UnitPrice } from "@/storefront/components/unit-price";
 import { Badge } from "@/storefront/components/ui/badge";
 import { AddToCart } from "../../add-to-cart";
 
-export async function ProductGridItem({ product }: { product: Product }) {
+export async function ProductGridItem({
+  product,
+}: {
+  product: PaginatedProductsQueryTemplateResult[number];
+}) {
   const { store } = product;
 
   if (!store) return null;
@@ -58,17 +62,15 @@ export async function ProductGridItem({ product }: { product: Product }) {
           className="space-y-2 md:space-y-3 mb-auto"
         >
           <div className="space-y-0.5">
-            <h2 className="font-bold font-serif text-sm sm:text-[0.95rem]">
-              {title}
-            </h2>
+            <h2 className="font-semibold text-sm sm:text-[0.95rem]">{title}</h2>
             <p className="text-sm text-muted-foreground">Sverige 270g</p>
           </div>
 
-          <div className="space-y-0.5">
+          <div>
             <Price
               amount={selectedVariant.price.amount}
               currencyCode={selectedVariant.price.currencyCode}
-              className="font-bold font-serif text-sm text-[1rem]"
+              className="font-semibold"
             />
             {selectedVariant.unitPrice &&
               selectedVariant.unitPriceMeasurement && (

@@ -1,4 +1,4 @@
-import { Product } from "@/sanity.types";
+import { PaginatedProductsQueryTemplateResult } from "@/sanity.types";
 import { Suspense } from "react";
 import { ProductGridItem } from "./item";
 import { ProductGridItemSkeleton } from "./item/skeleton";
@@ -11,7 +11,7 @@ export function ProductGrid({
   products,
   className,
 }: {
-  products: Product[];
+  products: PaginatedProductsQueryTemplateResult;
   className?: string;
 }) {
   if (products.length === 0)

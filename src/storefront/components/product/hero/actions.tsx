@@ -24,9 +24,7 @@ export function ProductActions({
     <div className="space-y-4 md:space-y-7">
       <div className="space-y-1 md:space-y-2">
         {store?.vendor && (
-          <span className="text-sm uppercase text-muted-foreground">
-            {store.vendor}
-          </span>
+          <span className="text-sm text-muted-foreground">{store.vendor}</span>
         )}
         <h1 className="font-semibold text-xl md:text-3xl">{title}</h1>
         <p className="text-muted-foreground md:text-xl">Sverige 270g</p>

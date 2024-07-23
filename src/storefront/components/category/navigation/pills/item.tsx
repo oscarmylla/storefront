@@ -20,7 +20,7 @@ export function CategoryNavigationPill({
       className={cn(
         "rounded-full text-base gap-1.5 md:text-sm h-11 px-5 md:h-10 md:px-4",
         {
-          "text-foreground/75": !isCurrent,
+          "text-foreground/90": !isCurrent,
         }
       )}
     >

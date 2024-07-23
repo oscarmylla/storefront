@@ -3,8 +3,9 @@ import { CategoryBreadcrumb } from "./breadcrumb";
 import { CategoryWithChildrenAndProductCount } from "@/sanity/types/category";
 import { Category } from "@/sanity.types";
 import { CategoryProducts } from "./products";
-import CategoryControls from "./controls";
 import { CategoryNavigation } from "./navigation";
+import { PaginatedControls } from "../common/paginated-products/controls";
+import { SortOptions } from "../common/paginated-products/sort-products";
 
 export default function CategoryMain({
   params,
@@ -15,7 +16,7 @@ export default function CategoryMain({
   category: Category;
   params: { category: string[] };
   categories: CategoryWithChildrenAndProductCount[];
-  order?: string;
+  order?: SortOptions;
 }) {
   const rootCategory = categories[0];
   return (
@@ -23,12 +24,12 @@ export default function CategoryMain({
       <div className="space-y-6">
         <div className="space-y-3">
           <CategoryBreadcrumb categories={categories} slugs={params.category} />
-          <h1 className="text-3xl tracking-tight lg:text-4xl font-serif font-bold">
+          <h1 className="text-3xl tracking-tight lg:text-4xl font-bold">
             {rootCategory?.title}
           </h1>
         </div>
         <CategoryNavigation categories={categories} slugs={params.category} />
-        <CategoryControls />
+        <PaginatedControls order={order} />
       </div>
       <CategoryProducts id={category._id} order={order} />
     </section>

@@ -17,7 +17,6 @@ const config = {
     extend: {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
-        serif: ["var(--font-serif)", ...fontFamily.serif],
       },
       boxShadow: {
         'mylla': '4px 5px 0 rgba(0, 0, 0, 1)',

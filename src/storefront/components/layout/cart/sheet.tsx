@@ -32,7 +32,8 @@ import { ScrollArea } from "@/storefront/components/ui/scroll-area";
 import { usePathname } from "next/navigation";
 import Price from "../../price";
 import { cn } from "@/storefront/lib/utils";
-import OpenCart from "../_cart/open-cart";
+import OpenCart from "./open-cart";
+import { AddToCart } from "../../common/add-to-cart";
 
 export type MerchandiseSearchParams = {
   [key: string]: string;
@@ -55,7 +56,7 @@ export function CartSheet({ cart }: CartSheetProps) {
       <SheetTrigger asChild>
         <OpenCart totalAmount={cart?.cost.totalAmount} />
       </SheetTrigger>
-      <SheetContent className="bg-card flex flex-col overflow-auto text-left outline-none">
+      <SheetContent className="bg-card flex flex-col overflow-auto text-left outline-none p-6">
         {showZip ? (
           <SheetHeader className="my-auto max-w-64 self-center sm:text-center">
             <SheetTitle>Postnummer</SheetTitle>
@@ -122,7 +123,7 @@ function CartNotEmpty({
                 index={index}
                 item={item}
                 setOpen={setOpen}
-                key={index}
+                key={item.id}
               />
             );
           })}
@@ -211,13 +212,11 @@ function CartLine({
               className="text-sm"
             />
           </div>
-          <div className="ml-auto flex h-9 flex-row items-center rounded-md border">
-            {/* <EditItemQuantityButton item={item} type="minus" /> */}
-            <p className="w-6 text-center">
-              <span className="w-full text-sm">{item.quantity}</span>
-            </p>
-            {/* <EditItemQuantityButton item={item} type="plus" /> */}
-          </div>
+          <AddToCart
+            selectedVariantId={item.merchandise.id}
+            availableForSale={item.merchandise.availableForSale}
+            size="sm"
+          />
         </div>
       </div>
     </li>
@@ -256,12 +255,6 @@ function CartSummary({
         <SheetClose asChild>
           <Button variant="outline">Fortsätt handla</Button>
         </SheetClose>
-      </div>
-      <div className="flex items-center justify-center gap-4">
-        <Image src={myllaLogo} alt="Mylla logo" className="w-20" />
-        <p className="text-muted-foreground basis-48 text-xs">
-          Betalning och orderhantering behandlas av Mylla.
-        </p>
       </div>
     </>
   );

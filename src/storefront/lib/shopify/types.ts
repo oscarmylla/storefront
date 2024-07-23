@@ -34,6 +34,7 @@ export type CartItem = {
       name: string;
       value: string;
     }[];
+    availableForSale: boolean;
     sku?: string;
     unitPrice?: Money;
     unitPriceMeasurement?: {

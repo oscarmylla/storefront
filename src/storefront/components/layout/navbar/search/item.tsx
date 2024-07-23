@@ -39,7 +39,7 @@ export function SearchItem({ product }: { product: Product }) {
             <Price
               amount={selectedVariant.price.amount}
               currencyCode={selectedVariant.price.currencyCode}
-              className="font-bold font-serif text-base"
+              className="font-bold text-base"
             />
             {selectedVariant.unitPrice &&
               selectedVariant.unitPriceMeasurement && (

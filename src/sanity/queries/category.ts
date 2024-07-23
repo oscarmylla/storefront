@@ -33,12 +33,4 @@ export const categoriesByPathQuery = groq`*[_type == "category" && slug.current 
     }
 }`;
 
-// defined(sales) desc,
-
-export const categoryProductsQuery = groq`*[_type == "product" && references($id) && store.status == "active"] | order(select(
-  $order == "title" => 'sales asc')){
-  ...,
-  "sales": null
-}`;
-
 export const categoryPathQuery = groq`*[_type == "category" && _id == $id][0]{ path }`

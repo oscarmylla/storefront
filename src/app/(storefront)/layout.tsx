@@ -3,10 +3,7 @@ import "../globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import { VisualEditing, toPlainText } from "next-sanity";
-import {
-  Poppins as FontSans,
-  Plus_Jakarta_Sans as FontSerif,
-} from "next/font/google";
+import { DM_Sans as FontSans } from "next/font/google";
 import { draftMode } from "next/headers";
 import { Suspense } from "react";
 
@@ -70,12 +67,6 @@ const fontSans = FontSans({
   weight: ["400", "500", "600", "700"],
 });
 
-const fontSerif = FontSerif({
-  subsets: ["latin"],
-  variable: "--font-serif",
-  weight: ["400", "500", "600", "700", "800"],
-});
-
 export default async function RootLayout({
   children,
 }: {
@@ -88,8 +79,7 @@ export default async function RootLayout({
       <body
         className={cn(
           "min-h-screen bg-[#fdfdfd] text-foreground font-sans antialiased",
-          fontSans.variable,
-          fontSerif.variable
+          fontSans.variable
         )}
       >
         <ReactQueryProvider>

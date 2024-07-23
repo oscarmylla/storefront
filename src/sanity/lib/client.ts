@@ -1,7 +1,7 @@
 import { createClient } from "next-sanity";
 
 import { apiVersion, dataset, projectId, studioUrl } from "@/sanity/lib/api";
-import { developerToken } from "./token";
+import { editorToken } from "./token";
 
 export const client = createClient({
   projectId,
@@ -28,7 +28,7 @@ export const developerClient = createClient({
   apiVersion,
   useCdn: true,
   perspective: "published",
-  token: developerToken,
+  token: editorToken,
   stega: {
     studioUrl,
     // logger: console,

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getCategoriesByPath } from "@/sanity/data/category";
 import React from "react";
 import CategoryMain from "@/storefront/components/category";
+import { SortOptions } from "@/storefront/components/common/paginated-products/sort-products";
 
 export async function generateMetadata({
   params,
@@ -46,7 +47,7 @@ export default async function CategoryPage({
       params={params}
       category={category}
       categories={categories}
-      order={order}
+      order={order as SortOptions | undefined}
     />
   );
 }

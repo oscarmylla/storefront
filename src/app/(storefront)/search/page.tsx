@@ -1,10 +1,10 @@
-import { getProductsByIds } from "@/sanity/data/product";
-import { ProductGrid } from "@/storefront/components/common/product-grid";
-import { defaultSort, sorting } from "@/storefront/lib/constants";
+import PaginatedProducts from "@/storefront/components/common/paginated-products";
+import PaginatedProductsSkeleton from "@/storefront/components/common/paginated-products/skeleton";
 import { searchProducts } from "@/storefront/lib/shopify";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 export const metadata = {
   title: "Sök",
@@ -17,15 +17,11 @@ export default async function SearchPage({
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
   const {
-    sort,
     q: searchValue,
     after,
     before,
   } = searchParams as { [key: string]: string };
   if (!searchValue) return notFound();
-
-  const { sortKey, reverse } =
-    sorting.find((item) => item.slug === sort) || defaultSort;
 
   const {
     products: shopifyProducts,
@@ -38,16 +34,9 @@ export default async function SearchPage({
     before,
   });
 
-  const productIds = shopifyProducts.map((product) => product.id);
-  const products = await getProductsByIds(productIds);
-
-  // Sort products based on productsid index
-  const sortedProducts = products.sort((a, b) => {
-    return (
-      productIds.indexOf(a.store?.gid ?? "") -
-      productIds.indexOf(b.store?.gid ?? "")
-    );
-  });
+  const productIds = shopifyProducts.map(
+    (product) => product.id.split("/").pop() ?? ""
+  );
 
   return (
     <div>
@@ -58,7 +47,7 @@ export default async function SearchPage({
               ? "Vi kunde inte hitta några resultat för"
               : `Vi hittade ${totalCount} resultat för`}
           </p>
-          <h1 className="text-3xl tracking-tight lg:text-4xl font-serif font-bold">
+          <h1 className="text-3xl tracking-tight lg:text-4xl font-bold">
             {searchValue}
           </h1>
         </div>
@@ -73,7 +62,9 @@ export default async function SearchPage({
             Visa tidigare resultat
           </Link>
         )}
-        <ProductGrid products={sortedProducts} />
+        <Suspense fallback={<PaginatedProductsSkeleton />}>
+          <PaginatedProducts productsIds={productIds} page={1} />
+        </Suspense>
         {pageInfo.hasNextPage && (
           <Link
             href={`/search?q=${searchValue}&after=${pageInfo.endCursor}`}

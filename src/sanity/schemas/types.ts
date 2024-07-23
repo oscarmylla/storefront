@@ -40,6 +40,7 @@ import { shopifyCollection } from './objects/shopify/shopify-collection'
 import { shopifyProduct } from './objects/shopify/shopify-product'
 import { shopifyProductVariant } from './objects/shopify/shopify-product-variant'
 import { spot } from './objects/hotspot/spot'
+import { vendorBlog } from './objects/vendor/vendor-blog'
 
 // Objects used as annotations must be imported first
 const annotations = [linkEmail, linkExternal, linkInternal, linkProduct]
@@ -83,6 +84,7 @@ const objects = [
   shopifyProduct,
   shopifyProductVariant,
   spot,
+  vendorBlog
 ]
 
 import { portableText } from './arrays/portable-text'
@@ -98,8 +100,9 @@ import { productVariant } from './documents/product-variant'
 import { post } from './documents/post'
 import { author } from './documents/author'
 import { category } from './documents/category'
+import { vendor } from './documents/vendor'
 
-const documents = [collection, colorTheme, page, product, productVariant, post, author, category]
+const documents = [collection, colorTheme, page, product, productVariant, post, author, category, vendor]
 
 import { home } from './singletons/home'
 import { settings } from './singletons/settings'

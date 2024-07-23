@@ -69,6 +69,7 @@ const cartFragment = /* GraphQL */ `
                 name
                 value
               }
+              availableForSale
               sku
               unitPriceMeasurement{
                 measuredType

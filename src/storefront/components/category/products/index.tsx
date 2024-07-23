@@ -1,17 +1,23 @@
 import { Suspense } from "react";
-import { CategoryProductGrid } from "./grid";
-import { ProductGridSkeleton } from "@/storefront/components/common/product-grid/skeleton";
+import PaginatedProducts from "../../common/paginated-products";
+import PaginatedProductsSkeleton from "../../common/paginated-products/skeleton";
+import { SortOptions } from "../../common/paginated-products/sort-products";
 
 export function CategoryProducts({
   id,
   order,
 }: {
   id: string;
-  order?: string;
+  order?: SortOptions;
 }) {
   return (
-    <Suspense fallback={<ProductGridSkeleton className="py-10" />}>
-      <CategoryProductGrid id={id} className="py-10" order={order} />
+    <Suspense fallback={<PaginatedProductsSkeleton className="py-10" />}>
+      <PaginatedProducts
+        categoryId={id}
+        className="py-10"
+        page={1}
+        order={order}
+      />
     </Suspense>
   );
 }

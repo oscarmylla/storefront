@@ -1,6 +1,59 @@
+
+import { PaginatedProductsParams } from "@/storefront/components/common/paginated-products";
+import { SortOptions } from "@/storefront/components/common/paginated-products/sort-products";
 import { groq } from "next-sanity";
 
-export const productsQuery = groq`*[_type == "product"][0...40]`
+function sortOrder(order: SortOptions | undefined) {
+   switch (order) {
+      case "price_asc":
+         return "store.priceRange.maxVariantPrice asc";
+      case "price_desc":
+         return "store.priceRange.maxVariantPrice desc";
+      case "title":
+         return "store.title asc";
+      case "created_at":
+         return "createdAt desc";
+      case "best_selling":
+         return "defined(sales) desc, sales desc";
+      default:
+         return "createdAt desc";
+   }
+}
+
+export const productsCountQuery = ({ queryParams }: {
+   queryParams: PaginatedProductsParams;
+}) => {
+   const { category_id, type_id, vendor_id, id } = queryParams
+   const categoryFilter = category_id ? `references("${category_id}")` : "true";
+   const typeFilter = type_id ? `store.productType == "${decodeURIComponent(type_id[0])}"` : "true";
+   const vendorFilter = vendor_id ? `store.vendor == "${decodeURIComponent(vendor_id[0])}"` : "true";
+   const productIdsFilter = id ? `store.id in [${id.map(i => `${i}`).join(", ")}]` : "true";
+
+   return `count(*[_type == "product" && store.status == "active" && ${categoryFilter} && ${typeFilter} && ${vendorFilter} && ${productIdsFilter}])`
+};
+
+export const paginatedProductsQuery = ({ queryParams, page = 1 }: {
+   queryParams: PaginatedProductsParams;
+   page: number;
+}) => {
+   const { category_id, type_id, vendor_id, id, limit, order = "best_selling" } = queryParams
+   const orderFilter = `order(${sortOrder(order)})`
+   const categoryFilter = category_id ? `references("${category_id}")` : "true";
+   const typeFilter = type_id ? `store.productType == "${decodeURIComponent(type_id[0])}"` : "true";
+   const vendorFilter = vendor_id ? `store.vendor == "${decodeURIComponent(vendor_id[0])}"` : "true";
+   const productIdsFilter = id ? `store.id in [${id.map(i => `${i}`).join(", ")}]` : "true";
+   const pageFilter = `[${(page - 1) * limit}...${page * limit}]`
+
+   return `*[_type == "product" && store.status == "active" && ${categoryFilter} && ${typeFilter} && ${vendorFilter} && ${productIdsFilter}] | ${orderFilter} ${pageFilter}{
+      _id,
+      store
+   }`
+};
+
+export const paginatedProductsQueryTemplate = groq`*[_type == "product"]{
+   _id,
+   store
+}`
 
 export const productByHandleQuery = groq`*[_type == "product" && store.slug.current == $handle][0]{
    ...,
@@ -8,3 +61,5 @@ export const productByHandleQuery = groq`*[_type == "product" && store.slug.curr
 }`
 
 export const productsByIdsQuery = groq`*[_type == "product" && _id in $ids]`
+
+export const productsByVendorQuery = groq`*[_type == "product" && store.vendor == $vendor]`

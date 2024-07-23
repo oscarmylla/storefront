@@ -62,6 +62,12 @@ export const product = defineType({
       group: "seo",
     }),
     defineField({
+      name: "vendor",
+      type: "reference",
+      to: [{ type: "vendor" }],
+      group: "editorial",
+    }),
+    defineField({
       name: "category",
       type: "reference",
       to: [{ type: "category" }],

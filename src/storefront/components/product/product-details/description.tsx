@@ -16,7 +16,7 @@ export function ProductDescription({ vendor }: { vendor?: string }) {
       {vendor && (
         <div className="flex">
           <Link
-            href="/products/brand/handle"
+            href={`/products/brand/${encodeURIComponent(vendor)}`}
             className="flex gap-2 items-center"
           >
             Visa alla produkter from {vendor}{" "}

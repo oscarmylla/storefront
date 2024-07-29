@@ -8,12 +8,12 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/storefront/components/ui/carousel";
-import { Product } from "@/sanity.types";
+import { ShopifyProduct } from "@/sanity.types";
 
 export function FeaturedCollectionCarousel({
   products,
 }: {
-  products?: Product[] | null;
+  products?: { _id: string; store?: ShopifyProduct | null }[] | null;
 }) {
   return (
     <Carousel

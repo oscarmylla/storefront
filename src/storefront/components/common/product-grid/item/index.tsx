@@ -39,7 +39,7 @@ export async function ProductGridItem({
   const selectedVariantQuantityAvailable = selectedVariant.quantityAvailable;
 
   return (
-    <li className="rounded-xl overflow-hidden shadow-sm flex flex-col bg-background">
+    <li className="rounded-xl overflow-hidden shadow-sm flex flex-col bg-background h-full">
       <Link
         href={`/products/${slug?.current}`}
         scroll={false}

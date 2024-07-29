@@ -1273,8 +1273,63 @@ export type CategoryPathQueryResult = {
   }> | null;
 } | null;
 // Source: ./src/sanity/queries/home.ts
+// Variable: heroQuery
+// Query: *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) [0] {  content,    _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{"name": coalesce(name, "Anonymous"), picture},}
+export type HeroQueryResult = {
+  content: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }> | null;
+  _id: string;
+  status: "draft" | "published";
+  title: string | "Untitled";
+  slug: string | null;
+  excerpt: string | null;
+  coverImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  } | null;
+  date: string;
+  author: {
+    name: string | "Anonymous";
+    picture: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    } | null;
+  } | null;
+} | null;
 // Variable: homeQuery
-// Query: *[_type == "home"][0]{   ...,   "collection1": collection1 {      ...,      products[]->   },   "collection2": collection2 {      ...,      products[]->   },}
+// Query: *[_type == "home"][0]{   ...,   "collection1": collection1 {      ...,      products[]->{         _id,         store      }   },   "collection2": collection2 {      ...,      products[]->{         _id,         store      }   },}
 export type HomeQueryResult = {
   _id: string;
   _type: "home";
@@ -1300,42 +1355,7 @@ export type HomeQueryResult = {
     link?: Link;
     products: Array<{
       _id: string;
-      _type: "product";
-      _createdAt: string;
-      _updatedAt: string;
-      _rev: string;
-      hidden?: string;
-      titleProxy?: ProxyString;
-      slugProxy?: ProxyString;
-      colorTheme?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "colorTheme";
-      };
-      body?: PortableText;
-      store?: ShopifyProduct;
-      seo?: Seo;
-      vendor?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "vendor";
-      };
-      category?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "category";
-      };
-      categoryPath?: Array<{
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        _key: string;
-        [internalGroqTypeReferenceTo]?: "category";
-      }>;
-      sales?: number;
+      store: ShopifyProduct | null;
     }> | null;
   } | null;
   collection2: {
@@ -1357,42 +1377,7 @@ export type HomeQueryResult = {
     link?: Link;
     products: Array<{
       _id: string;
-      _type: "product";
-      _createdAt: string;
-      _updatedAt: string;
-      _rev: string;
-      hidden?: string;
-      titleProxy?: ProxyString;
-      slugProxy?: ProxyString;
-      colorTheme?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "colorTheme";
-      };
-      body?: PortableText;
-      store?: ShopifyProduct;
-      seo?: Seo;
-      vendor?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "vendor";
-      };
-      category?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "category";
-      };
-      categoryPath?: Array<{
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        _key: string;
-        [internalGroqTypeReferenceTo]?: "category";
-      }>;
-      sales?: number;
+      store: ShopifyProduct | null;
     }> | null;
   } | null;
   hero?: Hero;

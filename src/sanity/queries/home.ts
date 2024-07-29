@@ -1,4 +1,11 @@
 import { groq } from "next-sanity";
+import { postFields } from "../fragments/post";
+
+export const heroQuery = groq`*[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) [0] {
+  content,
+  ${postFields}
+}`;
+
 
 export const homeQuery = groq`*[_type == "home"][0]{
    ...,

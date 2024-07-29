@@ -1,4 +1,9 @@
-import { Collections, Link as LinkType, Product } from "@/sanity.types";
+import {
+  Collections,
+  Link as LinkType,
+  Product,
+  ShopifyProduct,
+} from "@/sanity.types";
 import { FeaturedCollectionCarousel } from "./carousel";
 import Image from "next/image";
 import { urlForImage } from "@/sanity/utils/urlForImage";
@@ -11,7 +16,7 @@ export function FeaturedCollection({
   collection?: {
     title?: string;
     paragraph?: string;
-    products?: Product[] | null;
+    products?: { _id: string; store?: ShopifyProduct | null }[] | null;
     picture?: Exclude<Collections["picture"], undefined> | null;
     link?: LinkType;
   } | null;
@@ -20,7 +25,7 @@ export function FeaturedCollection({
 
   return (
     <div className="container space-y-1">
-      <div className="relative py-10 lg:py-20 lg:items-center lg:text-center rounded-md overflow-hidden text-accent bg-gradient-to-t from-primary/60 to-primary/20 flex flex-col justify-center px-4 items-start">
+      <div className="relative py-10 lg:py-28 lg:items-center lg:text-center rounded-md overflow-hidden text-accent bg-gradient-to-t from-primary/60 to-primary/20 flex flex-col justify-center px-4 items-start">
         <Image
           src={
             urlForImage(collection.picture)
@@ -32,7 +37,9 @@ export function FeaturedCollection({
           fill
           className="object-cover -z-10"
         />
-        <h2 className="font-bold text-5xl leading-none">{collection.title}</h2>
+        <h2 className="font-bold text-5xl sm:text-4xl lg:text-5xl leading-none">
+          {collection.title}
+        </h2>
         {collection.paragraph && (
           <p className="text-xl mt-3 max-w-2xl">{collection.paragraph}</p>
         )}

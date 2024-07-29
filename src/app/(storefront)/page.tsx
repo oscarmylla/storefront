@@ -1,5 +1,7 @@
+import { getHome } from "@/sanity/data/home";
 import { Carousel } from "@/storefront/components/carousel";
 import { ThreeItemGrid } from "@/storefront/components/grid/three-items";
+import { HomeMain } from "@/storefront/components/home";
 
 export const metadata = {
   description:
@@ -10,10 +12,6 @@ export const metadata = {
 };
 
 export default async function HomePage() {
-  return (
-    <>
-      <ThreeItemGrid />
-      <Carousel />
-    </>
-  );
+  const content = await getHome();
+  return <HomeMain content={content} />;
 }

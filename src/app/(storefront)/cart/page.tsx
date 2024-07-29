@@ -8,7 +8,7 @@ export default async function CartPage() {
   if (!cart) return redirect("/");
 
   if (parseInt(cart.cost.subtotalAmount.amount) < 500) {
-    return redirect("/cart/supplement");
+    return redirect("/");
   }
 
   return <Cart cart={cart} />;

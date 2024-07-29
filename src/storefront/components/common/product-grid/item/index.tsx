@@ -1,4 +1,8 @@
-import { PaginatedProductsQueryTemplateResult, Product } from "@/sanity.types";
+import {
+  PaginatedProductsQueryTemplateResult,
+  Product,
+  ShopifyProduct,
+} from "@/sanity.types";
 import { getProductAvailability } from "@/storefront/lib/shopify";
 import Link from "next/link";
 import React from "react";
@@ -11,7 +15,9 @@ import { AddToCart } from "../../add-to-cart";
 export async function ProductGridItem({
   product,
 }: {
-  product: PaginatedProductsQueryTemplateResult[number];
+  product: Omit<PaginatedProductsQueryTemplateResult[number], "store"> & {
+    store?: ShopifyProduct | null;
+  };
 }) {
   const { store } = product;
 

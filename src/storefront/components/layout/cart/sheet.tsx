@@ -129,9 +129,11 @@ function CartNotEmpty({
           })}
         </ul>
       </ScrollArea>
-      <SheetFooter className="mt-auto space-y-4 sm:flex-col">
-        <Separator className="border-b" />
-        <CartSummary cart={cart} setOpen={setOpen} />
+      <SheetFooter className="mt-auto">
+        <div className="space-y-4 sm:flex-col flex-1">
+          <Separator className="border-b" />
+          <CartSummary cart={cart} setOpen={setOpen} />
+        </div>
       </SheetFooter>
     </>
   );

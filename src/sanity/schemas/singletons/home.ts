@@ -12,6 +12,16 @@ export const home = defineField({
   groups: GROUPS,
   fields: [
     defineField({
+      name: 'collection1',
+      type: 'collections',
+      group: 'editorial',
+    }),
+    defineField({
+      name: 'collection2',
+      type: 'collections',
+      group: 'editorial',
+    }),
+    defineField({
       name: 'hero',
       type: 'hero',
       group: 'editorial',

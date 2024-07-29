@@ -80,7 +80,7 @@ export function MenuClient({
         <MenuOpen />
       </SheetTrigger>
       <SheetContent side="left" className="flex flex-col">
-        <ScrollArea className="p-6">
+        <ScrollArea>
           <SheetHeader className="sr-only">
             <SheetTitle>Meny</SheetTitle>
             <SheetDescription>
@@ -89,13 +89,14 @@ export function MenuClient({
           </SheetHeader>
           <div className="space-y-7">
             <div>
-              <h3 className="font-semibold mb-3">Genvägar</h3>
+              <h3 className="font-semibold mb-3 p-6 pb-0">Genvägar</h3>
               <Carousel
                 opts={{
                   dragFree: true,
+                  containScroll: "trimSnaps",
                 }}
               >
-                <CarouselContent className="-ml-2">
+                <CarouselContent className="-ml-2" containerClassName="px-6">
                   {shortcuts.map(({ title, href, icon: Icon }, i) => (
                     <CarouselItem key={i} className="basis-auto pl-2">
                       <Button
@@ -114,7 +115,7 @@ export function MenuClient({
                 </CarouselContent>
               </Carousel>
             </div>
-            <div>
+            <div className="px-6">
               <h3 className="font-semibold mb-3">Erbjudanden</h3>
               <ul className="space-y-3">
                 {discounts.map(({ title, image, href }, i) => (
@@ -135,25 +136,27 @@ export function MenuClient({
                 ))}
               </ul>
             </div>
-            <div>
+            <div className="px-6">
               <h3 className="font-semibold">Kategorier</h3>
               <ul>
                 {categories.map((category) => (
-                  <li
-                    key={category._id}
-                    className="flex gap-5 items-center border-b last:border-b-0 py-3"
-                  >
-                    <Image
-                      src={category.thumbnails[0]!}
-                      alt={category.title!}
-                      className="w-11 rounded-md aspect-square"
-                      width={80}
-                      height={80}
-                    />
-                    <span className="font-medium">{category.title}</span>
-                    <span className="rounded-full px-3.5 py-1.5 bg-muted text-xs ml-auto">
-                      {category.product_count}
-                    </span>
+                  <li key={category._id} className="border-b last:border-b-0">
+                    <Link
+                      href={`/categories/${category.slug?.current}`}
+                      className="flex gap-5 items-center py-3"
+                    >
+                      <Image
+                        src={category.thumbnails[0]!}
+                        alt={category.title!}
+                        className="w-11 rounded-md aspect-square"
+                        width={80}
+                        height={80}
+                      />
+                      <span className="font-medium">{category.title}</span>
+                      <span className="rounded-full px-3.5 py-1.5 bg-muted text-xs ml-auto">
+                        {category.product_count}
+                      </span>
+                    </Link>
                   </li>
                 ))}
               </ul>

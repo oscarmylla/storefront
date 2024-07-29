@@ -43,7 +43,7 @@ import { spot } from './objects/hotspot/spot'
 import { vendorBlog } from './objects/vendor/vendor-blog'
 
 // Objects used as annotations must be imported first
-const annotations = [linkEmail, linkExternal, linkInternal, linkProduct]
+const annotations = [link, linkEmail, linkExternal, linkInternal, linkProduct]
 
 const objects = [
   accordionGroup,
@@ -52,6 +52,7 @@ const objects = [
   callToAction,
   collectionGroup,
   collectionLinks,
+  collectionFeatures,
   collectionReference,
   collectionRule,
   customProductOptionColorObject,
@@ -106,6 +107,8 @@ const documents = [collection, colorTheme, page, product, productVariant, post, 
 
 import { home } from './singletons/home'
 import { settings } from './singletons/settings'
+import { link } from './objects/link/link'
+import { collectionFeatures } from './objects/module/collection-features'
 
 const singletons = [home, settings]
 

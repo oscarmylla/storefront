@@ -97,8 +97,6 @@ export function DeliveryDatesForm({
     );
   }
 
-  console.log(data.disabled);
-
   const disabledDates = data.disabled.reduce((acc: any, item: any) => {
     if (Array.isArray(item)) {
       const date = new Date(item[0], item[1], item[2]);

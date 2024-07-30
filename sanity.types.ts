@@ -702,6 +702,19 @@ export type Vendor = {
   _updatedAt: string;
   _rev: string;
   name?: string;
+  summary?: string;
+  thumbnail?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
   slug?: Slug;
   blog?: VendorBlog;
 };
@@ -709,25 +722,35 @@ export type Vendor = {
 export type VendorBlog = {
   _type: "vendorBlog";
   title?: string;
-  content?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
-    listItem?: "bullet" | "number";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
+  content?: string;
+  quote?: string;
+  images?: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
     _key: string;
   }>;
-  quote?: string;
+  instagram?: string;
+  facebook?: string;
+  logo?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
 };
 
 export type ShopifyProduct = {
@@ -786,6 +809,7 @@ export type Home = {
   _rev: string;
   collection1?: Collections;
   collection2?: Collections;
+  vendors?: Vendors;
   hero?: Hero;
   modules?: Array<({
     _key: string;
@@ -803,6 +827,17 @@ export type Home = {
     _key: string;
   } & Products)>;
   seo?: Seo;
+};
+
+export type Vendors = {
+  _type: "vendors";
+  vendors?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "vendor";
+  }>;
 };
 
 export type Collections = {
@@ -1329,7 +1364,7 @@ export type HeroQueryResult = {
   } | null;
 } | null;
 // Variable: homeQuery
-// Query: *[_type == "home"][0]{   ...,   "collection1": collection1 {      ...,      products[]->{         _id,         store      }   },   "collection2": collection2 {      ...,      products[]->{         _id,         store      }   },}
+// Query: *[_type == "home"][0]{   ...,   "collection1": collection1 {      ...,      products[]->{         _id,         store      }   },   "collection2": collection2 {      ...,      products[]->{         _id,         store      }   },   "vendors": vendors.vendors[]->}
 export type HomeQueryResult = {
   _id: string;
   _type: "home";
@@ -1380,6 +1415,29 @@ export type HomeQueryResult = {
       store: ShopifyProduct | null;
     }> | null;
   } | null;
+  vendors: Array<{
+    _id: string;
+    _type: "vendor";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    name?: string;
+    summary?: string;
+    thumbnail?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    slug?: Slug;
+    blog?: VendorBlog;
+  }> | null;
   hero?: Hero;
   modules?: Array<({
     _key: string;
@@ -1695,6 +1753,57 @@ export type SettingsQueryResult = {
     metadataBase?: string;
     _type: "image";
   };
+} | null;
+// Source: ./src/sanity/queries/vendor.ts
+// Variable: vendorsQuery
+// Query: *[_type == "vendor"]
+export type VendorsQueryResult = Array<{
+  _id: string;
+  _type: "vendor";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  summary?: string;
+  thumbnail?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  slug?: Slug;
+  blog?: VendorBlog;
+}>;
+// Variable: vendorByHandleQuery
+// Query: *[_type == "vendor" && slug.current == $slug][0]
+export type VendorByHandleQueryResult = {
+  _id: string;
+  _type: "vendor";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  summary?: string;
+  thumbnail?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  slug?: Slug;
+  blog?: VendorBlog;
 } | null;
 // Source: ./src/app/(storefront)/posts/[slug]/page.tsx
 // Variable: postSlugs

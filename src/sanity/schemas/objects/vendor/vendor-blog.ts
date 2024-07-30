@@ -18,13 +18,73 @@ export const vendorBlog = defineField({
       defineField({
          name: "content",
          title: "Content",
-         type: "array",
-         of: [{ type: "block" }],
+         type: "text",
       }),
       defineField({
          name: 'quote',
          type: 'text',
          rows: 2,
+      }),
+      defineField({
+         name: "images",
+         title: "Images",
+         type: "array",
+         of: [{
+            type: "image",
+            fields: [
+               {
+                  name: "alt",
+                  type: "string",
+                  title: "Alternative text",
+                  description: "Important for SEO and accessiblity.",
+                  validation: (rule) => {
+                     return rule.custom((alt, context) => {
+                        if ((context.document?.thumbnail as any)?.asset?._ref && !alt) {
+                           return "Required";
+                        }
+                        return true;
+                     });
+                  },
+               },
+            ],
+            options: {
+               hotspot: true,
+            },
+         }],
+      }),
+      defineField({
+         name: 'instagram',
+         title: 'Instagram',
+         type: 'url',
+      }),
+      defineField({
+         name: 'facebook',
+         title: 'Facebook',
+         type: 'url',
+      }),
+      defineField({
+         name: "logo",
+         title: "Logo",
+         type: "image",
+         fields: [
+            {
+               name: "alt",
+               type: "string",
+               title: "Alternative text",
+               description: "Important for SEO and accessiblity.",
+               validation: (rule) => {
+                  return rule.custom((alt, context) => {
+                     if ((context.document?.thumbnail as any)?.asset?._ref && !alt) {
+                        return "Required";
+                     }
+                     return true;
+                  });
+               },
+            },
+         ],
+         options: {
+            hotspot: true,
+         },
       }),
    ]
 })

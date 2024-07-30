@@ -23,4 +23,5 @@ export const homeQuery = groq`*[_type == "home"][0]{
          store
       }
    },
+   "vendors": vendors.vendors[]->
 }`

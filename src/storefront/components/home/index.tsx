@@ -1,5 +1,5 @@
 import { HomeQueryResult } from "@/sanity.types";
-import { DeliveryForm } from "./delivery-form";
+import { Delivery } from "./delivery";
 import { FeaturedCollection } from "./featured-collection";
 import { FeaturedVendors } from "./featured-vendors";
 import { Hero } from "./hero";
@@ -14,8 +14,8 @@ export function HomeMain({ content }: { content: HomeQueryResult }) {
       <Rating />
       <ValueProps />
       <FeaturedCollection collection={content?.collection1} />
-      <DeliveryForm />
-      <FeaturedVendors />
+      <Delivery />
+      <FeaturedVendors vendors={content?.vendors} />
       <FeaturedCollection collection={content?.collection2} />
       <Reviews />
     </div>

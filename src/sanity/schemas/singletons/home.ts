@@ -22,6 +22,11 @@ export const home = defineField({
       group: 'editorial',
     }),
     defineField({
+      name: 'vendors',
+      type: 'vendors',
+      group: 'editorial',
+    }),
+    defineField({
       name: 'hero',
       type: 'hero',
       group: 'editorial',

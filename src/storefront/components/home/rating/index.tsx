@@ -4,7 +4,7 @@ import React from "react";
 
 export function Rating() {
   return (
-    <div className="py-8 text-center space-y-4 container md:py-16">
+    <div className="my-8 text-center space-y-4 container md:my-16">
       <h2 className="text-3xl font-semibold">Sveriges nöjdaste matälskare!</h2>
       <div className="sm:flex sm:justify-center sm:items-center sm:gap-3 space-y-1.5 sm:space-y-0">
         <div className="flex justify-center items-center gap-3">

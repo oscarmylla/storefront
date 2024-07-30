@@ -40,11 +40,7 @@ export async function ProductGridItem({
 
   return (
     <li className="rounded-xl overflow-hidden shadow-sm flex flex-col bg-background h-full">
-      <Link
-        href={`/products/${slug?.current}`}
-        scroll={false}
-        className="relative"
-      >
+      <Link href={`/products/${slug?.current}`} className="relative">
         <div className="absolute top-1.5 left-1.5 right-1.5 z-10">
           {!selectedVariant.availableForSale && (
             <Badge variant="secondary" className="font-medium bg-amber-100">
@@ -64,7 +60,6 @@ export async function ProductGridItem({
       <div className="p-3 sm:p-4 flex-1 flex flex-col gap-1 pt-2 sm:pt-3">
         <Link
           href={`/products/${slug?.current}`}
-          scroll={false}
           className="space-y-2 md:space-y-3 mb-auto"
         >
           <div className="space-y-0.5">

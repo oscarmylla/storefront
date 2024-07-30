@@ -32,7 +32,7 @@ const items = [
 
 export function ValueProps() {
   return (
-    <div className="grid grid-cols-2 gap-x-3 gap-y-5 lg:gap-x-5 container lg:grid-cols-4 max-w-6xl py-8 md:py-16 md:pt-8">
+    <div className="grid grid-cols-2 gap-x-3 gap-y-5 lg:gap-x-5 container lg:grid-cols-4 max-w-6xl my-8 md:my-16 md:mt-8">
       {items.map((item, index) => (
         <ValuePropItem key={index} {...item} />
       ))}

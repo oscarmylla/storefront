@@ -55,6 +55,7 @@ const objects = [
   collectionFeatures,
   collectionReference,
   collectionRule,
+  vendorFeatures,
   customProductOptionColorObject,
   customProductOptionColor,
   customProductOptionSizeObject,
@@ -109,6 +110,7 @@ import { home } from './singletons/home'
 import { settings } from './singletons/settings'
 import { link } from './objects/link/link'
 import { collectionFeatures } from './objects/module/collection-features'
+import { vendorFeatures } from './objects/module/vendor-features'
 
 const singletons = [home, settings]
 

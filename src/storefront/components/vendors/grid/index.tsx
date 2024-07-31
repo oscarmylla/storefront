@@ -7,30 +7,34 @@ export async function VendorsGrid() {
   const vendors = await getVendors();
 
   return (
-    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 container gap-3 md:gap-4">
-      {vendors.map((vendor) => (
-        <li key={vendor._id}>
-          <Link href={`/vendors/${vendor.slug?.current}`}>
-            <div className="aspect-video relative">
-              {vendor.thumbnail && (
-                <Image
-                  className="h-auto w-full object-cover"
-                  alt={vendor.thumbnail?.alt || ""}
-                  src={
-                    urlForImage(vendor.thumbnail)
-                      ?.height(1000)
-                      .width(2000)
-                      .url() as string
-                  }
-                  sizes="100vw"
-                  fill
-                />
-              )}
-            </div>
-            <span>{vendor.name}</span>
-          </Link>
-        </li>
-      ))}
+    <ul className="grid grid-cols-2 lg:grid-cols-3 container gap-x-3 md:gap-x-4 gap-y-6 md:gap-y-9">
+      {vendors
+        .filter((v) => v.blog)
+        .map((vendor) => (
+          <li key={vendor._id}>
+            <Link
+              href={`/vendors/${vendor.slug?.current}`}
+              className="border block rounded-md overflow-hidden"
+            >
+              <div className="aspect-[13/9] relative">
+                {vendor.thumbnail && (
+                  <Image
+                    className="h-auto w-full object-cover"
+                    alt={vendor.thumbnail?.alt || ""}
+                    src={
+                      urlForImage(vendor.thumbnail)?.width(1000).url() as string
+                    }
+                    sizes="50vw"
+                    fill
+                  />
+                )}
+              </div>
+              <div className="px-4 py-1.5 sm:py-2 border-t text-center">
+                <span className="font-medium sm:text-lg">{vendor.name}</span>
+              </div>
+            </Link>
+          </li>
+        ))}
     </ul>
   );
 }

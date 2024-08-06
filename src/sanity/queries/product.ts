@@ -20,18 +20,6 @@ function sortOrder(order: SortOptions | undefined) {
    }
 }
 
-export const productsCountQuery = ({ queryParams }: {
-   queryParams: PaginatedProductsParams;
-}) => {
-   const { category_id, type_id, vendor_id, id } = queryParams
-   const categoryFilter = category_id ? `references("${category_id}")` : "true";
-   const typeFilter = type_id ? `store.productType == "${decodeURIComponent(type_id[0])}"` : "true";
-   const vendorFilter = vendor_id ? `store.vendor == "${decodeURIComponent(vendor_id[0])}"` : "true";
-   const productIdsFilter = id ? `store.id in [${id.map(i => `${i}`).join(", ")}]` : "true";
-
-   return `count(*[_type == "product" && store.status == "active" && ${categoryFilter} && ${typeFilter} && ${vendorFilter} && ${productIdsFilter}])`
-};
-
 export const paginatedProductsQuery = ({ queryParams, page = 1 }: {
    queryParams: PaginatedProductsParams;
    page: number;
@@ -40,7 +28,7 @@ export const paginatedProductsQuery = ({ queryParams, page = 1 }: {
    const orderFilter = `order(${sortOrder(order)})`
    const categoryFilter = category_id ? `references("${category_id}")` : "true";
    const typeFilter = type_id ? `store.productType == "${decodeURIComponent(type_id[0])}"` : "true";
-   const vendorFilter = vendor_id ? `store.vendor == "${decodeURIComponent(vendor_id[0])}"` : "true";
+   const vendorFilter = vendor_id ? `vendor.name == "${decodeURIComponent(vendor_id[0])}"` : "true";
    const productIdsFilter = id ? `store.id in [${id.map(i => `${i}`).join(", ")}]` : "true";
    const pageFilter = `[${(page - 1) * limit}...${page * limit}]`
 
@@ -50,7 +38,8 @@ export const paginatedProductsQuery = ({ queryParams, page = 1 }: {
       "products": *[${documentFilter}] | ${orderFilter} ${pageFilter}{
          _id,
          store,
-         "variant": store.variants[0]->.store
+         "variant": store.variants[0]->.store,
+         origin
       },
       "count": count(*[${documentFilter}])
    }`
@@ -60,16 +49,18 @@ export const paginatedProductsQueryTemplate = groq`{
    "products": *[_type == "product"]{
       _id,
       store,
-      "variant": store.variants[0]->.store
+      "variant": store.variants[0]->.store,
+      origin
    },
    "count": count(*[_type == "product"])
 }`
 
 export const productByHandleQuery = groq`*[_type == "product" && store.slug.current == $handle][0]{
    ...,
-   categoryPath[]->
+   categoryPath[]->,
+   vendor->
 }`
 
 export const productsByIdsQuery = groq`*[_type == "product" && _id in $ids]`
 
-export const productsByVendorQuery = groq`*[_type == "product" && store.vendor == $vendor]`
+export const productsByVendorQuery = groq`*[_type == "product" && vendor.name == $vendor]`

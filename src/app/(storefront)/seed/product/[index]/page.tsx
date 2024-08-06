@@ -1,12 +1,10 @@
 import React from "react";
-import fs from "fs";
-import { getProduct } from "@/storefront/lib/shopify";
 import Link from "next/link";
 import { Button } from "@/storefront/components/ui/button";
 import { developerClient } from "@/sanity/lib/client";
 import { z } from "zod";
 import { FormSchema, SeedProductForm } from "./form";
-import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
+import { revalidateTag, unstable_cache } from "next/cache";
 import { Product } from "@/sanity.types";
 
 export const dynamic = "force-dynamic";

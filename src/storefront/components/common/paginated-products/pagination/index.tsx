@@ -6,6 +6,7 @@ import {
 } from "@/storefront/components/ui/pagination";
 import { generatePaginationLinks } from "@/storefront/utils/generate-pagination-links";
 import { usePathname, useSearchParams } from "next/navigation";
+import { Fragment } from "react";
 
 export function Pagination({
   page = 1,
@@ -20,7 +21,11 @@ export function Pagination({
   return (
     <PaginationComponent>
       <PaginationContent>
-        {generatePaginationLinks(page, totalPages, pathname, searchParams)}
+        {generatePaginationLinks(page, totalPages, pathname, searchParams).map(
+          (component, index) => {
+            return <Fragment key={index}>{component}</Fragment>;
+          }
+        )}
       </PaginationContent>
     </PaginationComponent>
   );

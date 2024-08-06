@@ -1389,7 +1389,7 @@ export type HeroQueryResult = {
   } | null;
 } | null;
 // Variable: homeQuery
-// Query: *[_type == "home"][0]{   ...,   "collection1": collection1 {      ...,      products[]->{         _id,         store,         "variant": store.variants[0]->.store      }   },   "collection2": collection2 {      ...,      products[]->{         _id,         store,         "variant": store.variants[0]->.store      }   },   "vendors": vendors.vendors[]->}
+// Query: *[_type == "home"][0]{   ...,   "collection1": collection1 {      ...,      products[]->{         _id,         store,         origin,         "variant": store.variants[0]->.store      }   },   "collection2": collection2 {      ...,      products[]->{         _id,         store,         origin,         "variant": store.variants[0]->.store      }   },   "vendors": vendors.vendors[]->}
 export type HomeQueryResult = {
   _id: string;
   _type: "home";
@@ -1416,6 +1416,10 @@ export type HomeQueryResult = {
     products: Array<{
       _id: string;
       store: ShopifyProduct | null;
+      origin: {
+        country?: string;
+        city?: string;
+      } | null;
       variant: ShopifyProductVariant | null;
     }> | null;
   } | null;
@@ -1439,6 +1443,10 @@ export type HomeQueryResult = {
     products: Array<{
       _id: string;
       store: ShopifyProduct | null;
+      origin: {
+        country?: string;
+        city?: string;
+      } | null;
       variant: ShopifyProductVariant | null;
     }> | null;
   } | null;
@@ -1578,17 +1586,21 @@ export type PostQueryResult = {
 } | null;
 // Source: ./src/sanity/queries/product.ts
 // Variable: paginatedProductsQueryTemplate
-// Query: {   "products": *[_type == "product"]{      _id,      store,      "variant": store.variants[0]->.store   },   "count": count(*[_type == "product"])}
+// Query: {   "products": *[_type == "product"]{      _id,      store,      "variant": store.variants[0]->.store,      origin   },   "count": count(*[_type == "product"])}
 export type PaginatedProductsQueryTemplateResult = {
   products: Array<{
     _id: string;
     store: ShopifyProduct | null;
     variant: ShopifyProductVariant | null;
+    origin: {
+      country?: string;
+      city?: string;
+    } | null;
   }>;
   count: number;
 };
 // Variable: productByHandleQuery
-// Query: *[_type == "product" && store.slug.current == $handle][0]{   ...,   categoryPath[]->}
+// Query: *[_type == "product" && store.slug.current == $handle][0]{   ...,   categoryPath[]->,   vendor->}
 export type ProductByHandleQueryResult = {
   _id: string;
   _type: "product";
@@ -1607,12 +1619,29 @@ export type ProductByHandleQueryResult = {
   body?: PortableText;
   store?: ShopifyProduct;
   seo?: Seo;
-  vendor?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "vendor";
-  };
+  vendor: {
+    _id: string;
+    _type: "vendor";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    name?: string;
+    summary?: string;
+    thumbnail?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    slug?: Slug;
+    blog?: VendorBlog;
+  } | null;
   category?: {
     _ref: string;
     _type: "reference";
@@ -1735,7 +1764,7 @@ export type ProductsByIdsQueryResult = Array<{
   };
 }>;
 // Variable: productsByVendorQuery
-// Query: *[_type == "product" && store.vendor == $vendor]
+// Query: *[_type == "product" && vendor.name == $vendor]
 export type ProductsByVendorQueryResult = Array<{
   _id: string;
   _type: "product";

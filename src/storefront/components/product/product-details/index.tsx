@@ -1,4 +1,4 @@
-import { Category, Product } from "@/sanity.types";
+import { Category, Product, Vendor } from "@/sanity.types";
 import { ProductContents } from "./contents";
 import { ProductDescription } from "./description";
 import { ProductNutrition } from "./nutrition";
@@ -6,17 +6,20 @@ import { ProductNutrition } from "./nutrition";
 export function ProductDetails({
   product,
 }: {
-  product: Omit<Product, "categoryPath"> & { categoryPath: Category[] | null };
+  product: Omit<Product, "vendor" | "categoryPath"> & {
+    vendor: Vendor | null;
+    categoryPath: Category[] | null;
+  };
 }) {
-  const { store } = product;
+  const { store, description, vendor } = product;
 
   return (
     <div>
       <div className="lg:flex lg:gap-6 xl:gap-10 py-6">
-        <ProductDescription vendor={store?.vendor} />
+        <ProductDescription vendor={vendor?.name} description={description} />
         <div className="lg:basis-3/5">
-          <ProductContents />
-          <ProductNutrition />
+          <ProductContents product={product} />
+          <ProductNutrition nutritionalValue={product.nutritionalValue} />
         </div>
       </div>
 

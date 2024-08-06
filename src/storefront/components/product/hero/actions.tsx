@@ -2,7 +2,7 @@ import React from "react";
 import Price from "../../price";
 import { UnitPrice } from "../../unit-price";
 import { AddToCart } from "../../common/add-to-cart";
-import { Category, Product } from "@/sanity.types";
+import { Category, Product, Vendor } from "@/sanity.types";
 import {
   Product as ShopifyProduct,
   ProductVariant,
@@ -13,21 +13,28 @@ export function ProductActions({
   shopifyProduct,
   selectedVariant,
 }: {
-  product: Omit<Product, "categoryPath"> & { categoryPath: Category[] | null };
+  product: Omit<Product, "vendor" | "categoryPath"> & {
+    vendor: Vendor | null;
+    categoryPath: Category[] | null;
+  };
   shopifyProduct: ShopifyProduct;
   selectedVariant: ProductVariant;
 }) {
   const { title, priceRange } = shopifyProduct;
-  const { store } = product;
+  const { store, origin, vendor } = product;
 
   return (
     <div className="space-y-4 md:space-y-7">
       <div className="space-y-1 md:space-y-2">
-        {store?.vendor && (
-          <span className="text-sm text-muted-foreground">{store.vendor}</span>
+        {vendor && (
+          <span className="text-sm text-muted-foreground">{vendor.name}</span>
         )}
         <h1 className="font-semibold text-xl md:text-3xl">{title}</h1>
-        <p className="text-muted-foreground md:text-xl">Sverige 270g</p>
+        {origin && (
+          <p className="text-muted-foreground md:text-xl">
+            {origin.country} 270g
+          </p>
+        )}
       </div>
       <div className="space-y-1 md:space-y-2">
         <Price

@@ -1,7 +1,13 @@
 import { getProductRecommendations } from "@/sanity/data/product";
 import { ProductGrid } from "../../common/product-grid";
 
-export async function RelatedProducts({ id }: { id: string }) {
+export async function RelatedProducts({
+  id,
+  modal,
+}: {
+  id: string;
+  modal?: boolean;
+}) {
   const { products } = await getProductRecommendations(id);
 
   if (!products.length) return null;
@@ -11,7 +17,7 @@ export async function RelatedProducts({ id }: { id: string }) {
       <h2 className="mb-4 text-xl text-[1.15rem] lg:text-[1.4rem] font-semibold">
         Mer lokal mat i säsong
       </h2>
-      <ProductGrid products={products} />
+      <ProductGrid products={products} modal={modal} />
     </div>
   );
 }

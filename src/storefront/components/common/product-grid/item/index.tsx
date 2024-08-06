@@ -11,6 +11,7 @@ import { AddToCart } from "../../add-to-cart";
 
 export async function ProductGridItem({
   product,
+  modal,
 }: {
   product: Omit<
     PaginatedProductsQueryTemplateResult["products"][number],
@@ -18,8 +19,9 @@ export async function ProductGridItem({
   > & {
     store?: ShopifyProduct | null;
   };
+  modal?: boolean;
 }) {
-  const { store, variant } = product;
+  const { store, variant, origin } = product;
 
   if (!store || !variant) return null;
 
@@ -32,7 +34,11 @@ export async function ProductGridItem({
 
   return (
     <li className="rounded-xl overflow-hidden shadow-sm flex flex-col bg-background h-full">
-      <Link href={`/products/${slug?.current}`} className="relative">
+      <Link
+        href={`/products/${slug?.current}`}
+        className="relative"
+        replace={!!modal}
+      >
         <div className="absolute top-1.5 left-1.5 right-1.5 z-10">
           {!isAvailable && (
             <Badge variant="secondary" className="font-medium bg-amber-100">
@@ -56,7 +62,9 @@ export async function ProductGridItem({
         >
           <div className="space-y-0.5">
             <h2 className="font-semibold text-sm sm:text-[0.95rem]">{title}</h2>
-            <p className="text-sm text-muted-foreground">Sverige 270g</p>
+            <p className="text-sm text-muted-foreground">
+              {origin?.country} 270g
+            </p>
           </div>
 
           <div>

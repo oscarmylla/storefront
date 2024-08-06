@@ -5,7 +5,7 @@ import {
 } from "@/storefront/lib/shopify/types";
 import { Suspense } from "react";
 import { RelatedProducts } from "./related-products";
-import { Category, Product } from "@/sanity.types";
+import { Category, Product, Vendor } from "@/sanity.types";
 import { ProductBreadcrumb } from "./breadcrumb";
 import { ProductDetails } from "./product-details";
 import { ProductHero } from "./hero";
@@ -17,7 +17,8 @@ export async function ProductMain({
   modal = false,
 }: {
   shopifyProduct: ShopifyProduct;
-  product: Omit<Product, "categoryPath"> & {
+  product: Omit<Product, "vendor" | "categoryPath"> & {
+    vendor: Vendor | null;
     categoryPath: Category[] | null;
   };
   selectedVariant: ProductVariant;
@@ -39,7 +40,7 @@ export async function ProductMain({
       />
       <ProductDetails product={product} />
       <Suspense>
-        <RelatedProducts id={shopifyProduct.id} />
+        <RelatedProducts id={shopifyProduct.id} modal={true} />
       </Suspense>
     </div>
   );

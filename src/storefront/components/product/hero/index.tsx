@@ -1,4 +1,4 @@
-import { Category, Product } from "@/sanity.types";
+import { Category, Product, Vendor } from "@/sanity.types";
 import { ProductActions } from "./actions";
 import { ProductGallery } from "./gallery";
 import {
@@ -13,7 +13,10 @@ export function ProductHero({
   selectedVariant,
 }: {
   shopifyProduct: ShopifyProduct;
-  product: Omit<Product, "categoryPath"> & { categoryPath: Category[] | null };
+  product: Omit<Product, "vendor" | "categoryPath"> & {
+    vendor: Vendor | null;
+    categoryPath: Category[] | null;
+  };
   selectedVariant: ProductVariant;
 }) {
   return (

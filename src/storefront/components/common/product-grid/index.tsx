@@ -10,9 +10,11 @@ export const productGridClasses =
 export function ProductGrid({
   products,
   className,
+  modal,
 }: {
   products: PaginatedProductsQueryTemplateResult["products"];
   className?: string;
+  modal?: boolean;
 }) {
   if (products.length === 0)
     return (
@@ -25,7 +27,7 @@ export function ProductGrid({
     <ul className={cn(productGridClasses, className)}>
       {products.map((product) => (
         <Suspense key={product._id} fallback={<ProductGridItemSkeleton />}>
-          <ProductGridItem product={product} />
+          <ProductGridItem product={product} modal={modal} />
         </Suspense>
       ))}
     </ul>

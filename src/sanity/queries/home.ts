@@ -14,6 +14,7 @@ export const homeQuery = groq`*[_type == "home"][0]{
       products[]->{
          _id,
          store,
+         origin,
          "variant": store.variants[0]->.store
       }
    },
@@ -22,6 +23,7 @@ export const homeQuery = groq`*[_type == "home"][0]{
       products[]->{
          _id,
          store,
+         origin,
          "variant": store.variants[0]->.store
       }
    },

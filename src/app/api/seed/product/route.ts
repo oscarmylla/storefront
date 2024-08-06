@@ -3,13 +3,10 @@ import { developerClient } from "@/sanity/lib/client";
 import { groq } from "next-sanity";
 import { NextRequest } from "next/server";
 import fs from "fs";
-import { nanoid } from "nanoid";
 import { ChatOpenAI } from "@langchain/openai";
 
 import { z } from "zod";
-import { getProducts } from "@/storefront/lib/shopify";
 import { Connection, PageInfo, ShopifyProduct } from "@/storefront/lib/shopify/types";
-import productFragment from "@/storefront/lib/shopify/fragments/product";
 import { isShopifyError } from "@/storefront/lib/type-guards";
 
 type ExtractVariables<T> = T extends { variables: object } ? T['variables'] : never;

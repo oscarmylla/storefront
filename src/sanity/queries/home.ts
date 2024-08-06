@@ -13,14 +13,16 @@ export const homeQuery = groq`*[_type == "home"][0]{
       ...,
       products[]->{
          _id,
-         store
+         store,
+         "variant": store.variants[0]->.store
       }
    },
    "collection2": collection2 {
       ...,
       products[]->{
          _id,
-         store
+         store,
+         "variant": store.variants[0]->.store
       }
    },
    "vendors": vendors.vendors[]->

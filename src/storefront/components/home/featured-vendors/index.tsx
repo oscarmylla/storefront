@@ -29,7 +29,8 @@ export function FeaturedVendors({ vendors }: { vendors?: Vendors }) {
   return (
     <div className="grid md:grid-cols-2 gap-3 container mb-8 md:mb-16 md:gap-4">
       {vendors?.map((vendor) => (
-        <div
+        <Link
+          href={`/vendors/${vendor.slug?.current}`}
           key={vendor._id}
           className="flex flex-col justify-center items-start relative rounded-md overflow-hidden bg-gradient-to-t from-primary/60 to-primary/20 text-accent px-5 py-7 min-h-72 md:min-h-96 md:px-12"
         >
@@ -48,10 +49,10 @@ export function FeaturedVendors({ vendors }: { vendors?: Vendors }) {
           <p className="mb-5 text-lg font-medium leading-tight max-w-72 md:max-w-md">
             {vendor.summary}
           </p>
-          <Button asChild className="rounded-full" variant="secondary">
-            <Link href={`/vendors/${vendor.slug?.current}`}>Läs mer</Link>
+          <Button className="rounded-full" variant="secondary">
+            Läs mer
           </Button>
-        </div>
+        </Link>
       ))}
     </div>
   );

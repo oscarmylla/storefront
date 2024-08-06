@@ -1,6 +1,7 @@
 import { getPaginatedProducts } from "@/sanity/data/product";
 import { ProductGrid } from "../product-grid";
 import { SortOptions } from "./sort-products";
+import { Pagination } from "./pagination";
 
 const PRODUCT_LIMIT = 30;
 
@@ -25,7 +26,7 @@ export default async function PaginatedProducts({
   className,
 }: {
   order?: SortOptions;
-  page: number;
+  page?: number;
   collectionId?: string;
   categoryId?: string;
   vendorId?: string;
@@ -61,7 +62,7 @@ export default async function PaginatedProducts({
     queryParams["order"] = order;
   }
 
-  const { products } = await getPaginatedProducts({
+  const { products, totalPages } = await getPaginatedProducts({
     queryParams,
     page,
   });
@@ -69,7 +70,9 @@ export default async function PaginatedProducts({
   return (
     <>
       <ProductGrid products={products} className={className} />
-      {/* {totalPages > 1 && <Pagination page={page} totalPages={totalPages} />} */}
+      {page && totalPages > 1 && (
+        <Pagination page={page} totalPages={totalPages} />
+      )}
     </>
   );
 }

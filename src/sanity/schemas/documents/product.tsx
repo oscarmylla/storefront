@@ -101,6 +101,114 @@ export const product = defineType({
       title: "Sales",
       type: "number",
     }),
+    defineField({
+      name: "origin",
+      type: "object",
+      group: "editorial",
+      fields: [
+        defineField({
+          name: "country",
+          type: "string",
+        }),
+        defineField({
+          name: "city",
+          type: "string",
+        }),
+      ],
+    }),
+    defineField({
+      name: "tradeName",
+      type: "text",
+      group: "editorial",
+    }),
+    defineField({
+      name: "description",
+      type: "text",
+      group: "editorial",
+    }),
+    defineField({
+      name: "usage",
+      type: "text",
+      group: "editorial",
+    }),
+    defineField({
+      name: "other",
+      type: "text",
+      group: "editorial",
+    }),
+    defineField({
+      name: "size",
+      type: "string",
+      group: "editorial",
+    }),
+    defineField({
+      name: "packaging",
+      type: "text",
+      group: "editorial",
+    }),
+    defineField({
+      name: "storage",
+      type: "text",
+      group: "editorial",
+    }),
+    defineField({
+      name: "ingredients",
+      type: "text",
+      group: "editorial",
+    }),
+    defineField({
+      name: "labels",
+      type: "text",
+      group: "editorial",
+    }),
+    defineField({
+      name: "allergens",
+      type: "text",
+      group: "editorial",
+    }),
+    defineField({
+      name: "nutritionalValue",
+      type: "object",
+      group: "editorial",
+      fields: [
+        defineField({
+          name: "calories",
+          type: "number",
+        }),
+        defineField({
+          name: "protein",
+          type: "number",
+        }),
+        defineField({
+          name: "carbohydrates",
+          type: "number",
+        }),
+        defineField({
+          name: "sugars",
+          type: "number",
+        }),
+        defineField({
+          name: "fiber",
+          type: "number",
+        }),
+        defineField({
+          name: "fat",
+          type: "number",
+        }),
+        defineField({
+          name: "saturated",
+          type: "number",
+        }),
+        defineField({
+          name: "salt",
+          type: "number",
+        }),
+        defineField({
+          name: "other",
+          type: "text",
+        }),
+      ],
+    }),
   ],
   orderings: [
     {

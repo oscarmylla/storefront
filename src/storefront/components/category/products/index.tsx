@@ -6,16 +6,18 @@ import { SortOptions } from "../../common/paginated-products/sort-products";
 export function CategoryProducts({
   id,
   order,
+  page,
 }: {
   id: string;
   order?: SortOptions;
+  page?: number;
 }) {
   return (
     <Suspense fallback={<PaginatedProductsSkeleton className="py-10" />}>
       <PaginatedProducts
         categoryId={id}
         className="py-10"
-        page={1}
+        page={page}
         order={order}
       />
     </Suspense>

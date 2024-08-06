@@ -1,38 +1,28 @@
-import { PaginatedProductsQueryTemplateResult, ProductByHandleQueryResult, ProductsByIdsQueryResult, ProductsByVendorQueryResult } from "@/sanity.types";
+import { PaginatedProductsQueryTemplateResult, ProductByHandleQueryResult, } from "@/sanity.types";
 import { sanityFetch } from "../lib/fetch";
-import { paginatedProductsQuery, productByHandleQuery, productsByIdsQuery, productsByVendorQuery, productsCountQuery } from "../queries/product";
+import { paginatedProductsQuery, productByHandleQuery, } from "../queries/product";
 import { getProductRecommendationIds } from "@/storefront/lib/shopify";
 import { PaginatedProductsParams } from "@/storefront/components/common/paginated-products";
 
-export async function getProductCount({ queryParams }: {
-   queryParams: PaginatedProductsParams;
-}) {
-   return await sanityFetch<number>({
-      query: productsCountQuery({ queryParams })
-   });
-}
-
 export async function getPaginatedProducts({
    queryParams,
-   page
+   page = 1
 }: {
    queryParams: PaginatedProductsParams
-   page: number
+   page?: number
 }) {
-   const productCount = await getProductCount({ queryParams });
-
-   const products = await sanityFetch<PaginatedProductsQueryTemplateResult>({
+   const { products, count } = await sanityFetch<PaginatedProductsQueryTemplateResult>({
       query: paginatedProductsQuery({
          queryParams,
          page
       }),
    });
 
-   const totalPages = Math.ceil(productCount / queryParams.limit);
+   const totalPages = Math.ceil(count / queryParams.limit);
 
    return {
       products,
-      count: productCount,
+      count,
       totalPages
    }
 }

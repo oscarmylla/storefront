@@ -11,7 +11,7 @@ export function ProductGrid({
   products,
   className,
 }: {
-  products: PaginatedProductsQueryTemplateResult;
+  products: PaginatedProductsQueryTemplateResult["products"];
   className?: string;
 }) {
   if (products.length === 0)

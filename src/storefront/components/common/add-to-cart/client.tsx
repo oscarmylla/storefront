@@ -10,22 +10,16 @@ import { useCart } from "@/storefront/providers/cart";
 export function AddToCartClient({
   selectedVariantId,
   availableForSale,
-  quantityAvailable = 1000,
   size = "icon",
 }: {
   selectedVariantId: string;
   availableForSale?: boolean;
-  quantityAvailable?: number;
   size?: ButtonProps["size"];
 }) {
   const cart = useCart();
 
   return (
-    <AddToCartWrapper
-      selectedVariantId={selectedVariantId}
-      cart={cart}
-      quantityAvailable={quantityAvailable}
-    >
+    <AddToCartWrapper selectedVariantId={selectedVariantId} cart={cart}>
       {({ increment, decrement, optimisticQuantity, loading }) => {
         if (!availableForSale) {
           return (

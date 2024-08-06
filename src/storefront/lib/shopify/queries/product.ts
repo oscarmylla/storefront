@@ -10,23 +10,6 @@ export const getProductQuery = /* GraphQL */ `
   ${productFragment}
 `;
 
-export const getProductAvailabilityQuery = /* GraphQL */ `
-  query getProduct($handle: String!) {
-    product(handle: $handle){
-      availableForSale
-      totalInventory
-      variants(first: 10) {
-        edges {
-          node {
-            ...variant
-          }
-        }
-      }
-    }
-  }
-  ${variantFragment}
-`;
-
 export const getProductsQuery = /* GraphQL */ `
   query getProducts($sortKey: ProductSortKeys, $reverse: Boolean, $query: String, $first: Int = 100) {
     products(sortKey: $sortKey, reverse: $reverse, query: $query, first: $first) {

@@ -12,11 +12,13 @@ export default function CategoryMain({
   categories,
   category,
   order,
+  page,
 }: {
   category: Category;
   params: { category: string[] };
   categories: CategoryWithChildrenAndProductCount[];
   order?: SortOptions;
+  page?: number;
 }) {
   const rootCategory = categories[0];
   return (
@@ -31,7 +33,7 @@ export default function CategoryMain({
         <CategoryNavigation categories={categories} slugs={params.category} />
         <PaginatedControls order={order} />
       </div>
-      <CategoryProducts id={category._id} order={order} />
+      <CategoryProducts id={category._id} order={order} page={page} />
     </section>
   );
 }

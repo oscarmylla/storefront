@@ -16,7 +16,6 @@ export function AddToCartWrapper({
   cart,
   children,
   delay = 1000,
-  quantityAvailable,
 }: {
   selectedVariantId: string;
   cart?: Cart;
@@ -26,10 +25,8 @@ export function AddToCartWrapper({
     optimisticQuantity: number;
     cartQuantity: number;
     loading: boolean;
-    quantityAvailable: number;
   }) => React.ReactNode;
   delay?: number;
-  quantityAvailable: number;
 }) {
   const line = cart?.lines.find(
     (line) => line.merchandise.id === selectedVariantId
@@ -103,6 +100,5 @@ export function AddToCartWrapper({
     optimisticQuantity,
     cartQuantity,
     loading,
-    quantityAvailable,
   });
 }

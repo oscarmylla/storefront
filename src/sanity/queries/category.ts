@@ -3,7 +3,7 @@ import { groq } from "next-sanity";
 export const categoriesQuery = groq`*[_type == "category" && !defined(parent)]{
     ...,
     "product_count": count(*[_type=="product" && references(^._id) && store.status == "active"]),
-    "thumbnails": *[_type=="product" && references(^._id)][0...5].store.previewImageUrl
+    "thumbnails": *[_type=="product" && references(^._id)] | order(defined(sales) desc, sales desc)[0...5].store.previewImageUrl
 }`;
 
 // export const categoriesByPathQuery = groq`*[_type == "category" && slug.current in $slugs]{

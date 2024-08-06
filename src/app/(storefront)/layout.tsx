@@ -20,6 +20,7 @@ import { Header } from "@/storefront/components/layout/header";
 import { ReactQueryProvider } from "@/storefront/providers/react-query";
 import CartProvider from "@/storefront/providers/cart";
 import { getCart } from "@/storefront/lib/shopify";
+import { Toaster } from "@/storefront/components/ui/toaster";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await sanityFetch<SettingsQueryResult>({
@@ -89,6 +90,7 @@ export default async function RootLayout({
               <Header />
 
               <main>{children}</main>
+              <Toaster />
               <Suspense>
                 <Footer />
               </Suspense>

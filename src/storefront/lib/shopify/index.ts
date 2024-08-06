@@ -23,7 +23,6 @@ import {
 import { getMenuQuery } from './queries/menu';
 import { getPageQuery, getPagesQuery } from './queries/page';
 import {
-  getProductAvailabilityQuery,
   getProductQuery,
   getProductRecommendationsQuery,
   getProductsQuery,
@@ -52,7 +51,6 @@ import {
   ShopifyPageOperation,
   ShopifyPagesOperation,
   ShopifyProduct,
-  ShopifyProductAvailabilityOperation,
   ShopifyProductOperation,
   ShopifyProductRecommendationsOperation,
   ShopifyProductSearchOperation,
@@ -201,19 +199,6 @@ const reshapeProduct = (product: ShopifyProduct, filterHiddenProducts: boolean =
   return {
     ...rest,
     images: reshapeImages(images, product.title),
-    variants: removeEdgesAndNodes(variants)
-  };
-};
-
-const reshapeProductAvailability = (product: Pick<ShopifyProduct, "availableForSale" | "variants" | "totalInventory" | "priceRange">, filterHiddenProducts: boolean = true) => {
-  if (!product) {
-    return undefined;
-  }
-
-  const { variants, ...rest } = product;
-
-  return {
-    ...rest,
     variants: removeEdgesAndNodes(variants)
   };
 };
@@ -420,18 +405,6 @@ export async function getProduct(handle: string): Promise<Product | undefined> {
   });
 
   return reshapeProduct(res.body.data.product, false);
-}
-
-export async function getProductAvailability(handle: string): Promise<Pick<Product, "availableForSale" | "variants" | "totalInventory" | "priceRange"> | undefined> {
-  const res = await shopifyFetch<ShopifyProductAvailabilityOperation>({
-    query: getProductAvailabilityQuery,
-    tags: [TAGS.products],
-    variables: {
-      handle
-    }
-  });
-
-  return reshapeProductAvailability(res.body.data.product, false);
 }
 
 export async function getProductRecommendationIds(productId: string): Promise<string[]> {

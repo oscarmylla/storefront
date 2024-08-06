@@ -9,9 +9,11 @@ import { SortOptions } from "../common/paginated-products/sort-products";
 export default function CollectionMain({
   collection,
   order,
+  page,
 }: {
   collection: Collection;
   order?: SortOptions;
+  page?: number;
 }) {
   return (
     <section className="py-7 md:py-10 container">
@@ -24,7 +26,11 @@ export default function CollectionMain({
         </div>
         <PaginatedControls order={order} />
         <Suspense fallback={<PaginatedProductsSkeleton />}>
-          <CollectionProducts handle={collection.handle} order={order} />
+          <CollectionProducts
+            handle={collection.handle}
+            order={order}
+            page={page}
+          />
         </Suspense>
       </div>
     </section>

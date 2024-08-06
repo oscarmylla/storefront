@@ -5,7 +5,6 @@ import { AddToCartClient } from "./client";
 export function AddToCart(props: {
   selectedVariantId: string;
   availableForSale?: boolean;
-  quantityAvailable?: number;
   size?: ButtonProps["size"];
   className?: string;
 }) {

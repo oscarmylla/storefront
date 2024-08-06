@@ -670,6 +670,31 @@ export type Product = {
     [internalGroqTypeReferenceTo]?: "category";
   }>;
   sales?: number;
+  origin?: {
+    country?: string;
+    city?: string;
+  };
+  tradeName?: string;
+  description?: string;
+  usage?: string;
+  other?: string;
+  size?: string;
+  packaging?: string;
+  storage?: string;
+  ingredients?: string;
+  labels?: string;
+  allergens?: string;
+  nutritionalValue?: {
+    calories?: number;
+    protein?: number;
+    carbohydrates?: number;
+    sugars?: number;
+    fiber?: number;
+    fat?: number;
+    saturated?: number;
+    salt?: number;
+    other?: string;
+  };
 };
 
 export type Category = {
@@ -1223,7 +1248,7 @@ export type SanityAssistSchemaTypeField = {
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./src/sanity/queries/category.ts
 // Variable: categoriesQuery
-// Query: *[_type == "category" && !defined(parent)]{    ...,    "product_count": count(*[_type=="product" && references(^._id) && store.status == "active"]),    "thumbnails": *[_type=="product" && references(^._id)][0...5].store.previewImageUrl}
+// Query: *[_type == "category" && !defined(parent)]{    ...,    "product_count": count(*[_type=="product" && references(^._id) && store.status == "active"]),    "thumbnails": *[_type=="product" && references(^._id)] | order(defined(sales) desc, sales desc)[0...5].store.previewImageUrl}
 export type CategoriesQueryResult = Array<{
   _id: string;
   _type: "category";
@@ -1364,7 +1389,7 @@ export type HeroQueryResult = {
   } | null;
 } | null;
 // Variable: homeQuery
-// Query: *[_type == "home"][0]{   ...,   "collection1": collection1 {      ...,      products[]->{         _id,         store      }   },   "collection2": collection2 {      ...,      products[]->{         _id,         store      }   },   "vendors": vendors.vendors[]->}
+// Query: *[_type == "home"][0]{   ...,   "collection1": collection1 {      ...,      products[]->{         _id,         store,         "variant": store.variants[0]->.store      }   },   "collection2": collection2 {      ...,      products[]->{         _id,         store,         "variant": store.variants[0]->.store      }   },   "vendors": vendors.vendors[]->}
 export type HomeQueryResult = {
   _id: string;
   _type: "home";
@@ -1391,6 +1416,7 @@ export type HomeQueryResult = {
     products: Array<{
       _id: string;
       store: ShopifyProduct | null;
+      variant: ShopifyProductVariant | null;
     }> | null;
   } | null;
   collection2: {
@@ -1413,6 +1439,7 @@ export type HomeQueryResult = {
     products: Array<{
       _id: string;
       store: ShopifyProduct | null;
+      variant: ShopifyProductVariant | null;
     }> | null;
   } | null;
   vendors: Array<{
@@ -1551,11 +1578,15 @@ export type PostQueryResult = {
 } | null;
 // Source: ./src/sanity/queries/product.ts
 // Variable: paginatedProductsQueryTemplate
-// Query: *[_type == "product"]{   _id,   store}
-export type PaginatedProductsQueryTemplateResult = Array<{
-  _id: string;
-  store: ShopifyProduct | null;
-}>;
+// Query: {   "products": *[_type == "product"]{      _id,      store,      "variant": store.variants[0]->.store   },   "count": count(*[_type == "product"])}
+export type PaginatedProductsQueryTemplateResult = {
+  products: Array<{
+    _id: string;
+    store: ShopifyProduct | null;
+    variant: ShopifyProductVariant | null;
+  }>;
+  count: number;
+};
 // Variable: productByHandleQuery
 // Query: *[_type == "product" && store.slug.current == $handle][0]{   ...,   categoryPath[]->}
 export type ProductByHandleQueryResult = {
@@ -1611,6 +1642,31 @@ export type ProductByHandleQueryResult = {
     }>;
   }> | null;
   sales?: number;
+  origin?: {
+    country?: string;
+    city?: string;
+  };
+  tradeName?: string;
+  description?: string;
+  usage?: string;
+  other?: string;
+  size?: string;
+  packaging?: string;
+  storage?: string;
+  ingredients?: string;
+  labels?: string;
+  allergens?: string;
+  nutritionalValue?: {
+    calories?: number;
+    protein?: number;
+    carbohydrates?: number;
+    sugars?: number;
+    fiber?: number;
+    fat?: number;
+    saturated?: number;
+    salt?: number;
+    other?: string;
+  };
 } | null;
 // Variable: productsByIdsQuery
 // Query: *[_type == "product" && _id in $ids]
@@ -1652,6 +1708,31 @@ export type ProductsByIdsQueryResult = Array<{
     [internalGroqTypeReferenceTo]?: "category";
   }>;
   sales?: number;
+  origin?: {
+    country?: string;
+    city?: string;
+  };
+  tradeName?: string;
+  description?: string;
+  usage?: string;
+  other?: string;
+  size?: string;
+  packaging?: string;
+  storage?: string;
+  ingredients?: string;
+  labels?: string;
+  allergens?: string;
+  nutritionalValue?: {
+    calories?: number;
+    protein?: number;
+    carbohydrates?: number;
+    sugars?: number;
+    fiber?: number;
+    fat?: number;
+    saturated?: number;
+    salt?: number;
+    other?: string;
+  };
 }>;
 // Variable: productsByVendorQuery
 // Query: *[_type == "product" && store.vendor == $vendor]
@@ -1693,6 +1774,31 @@ export type ProductsByVendorQueryResult = Array<{
     [internalGroqTypeReferenceTo]?: "category";
   }>;
   sales?: number;
+  origin?: {
+    country?: string;
+    city?: string;
+  };
+  tradeName?: string;
+  description?: string;
+  usage?: string;
+  other?: string;
+  size?: string;
+  packaging?: string;
+  storage?: string;
+  ingredients?: string;
+  labels?: string;
+  allergens?: string;
+  nutritionalValue?: {
+    calories?: number;
+    protein?: number;
+    carbohydrates?: number;
+    sugars?: number;
+    fiber?: number;
+    fat?: number;
+    saturated?: number;
+    salt?: number;
+    other?: string;
+  };
 }>;
 // Source: ./src/sanity/queries/settings.ts
 // Variable: settingsQuery

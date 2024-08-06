@@ -7,9 +7,11 @@ import { SortOptions } from "../../common/paginated-products/sort-products";
 export async function CollectionProducts({
   handle,
   order,
+  page,
 }: {
   handle: string;
   order?: SortOptions;
+  page?: number;
 }) {
   const shopifyProducts = await getCollectionProducts({ collection: handle });
   const productIds = shopifyProducts.map(
@@ -18,7 +20,7 @@ export async function CollectionProducts({
 
   return (
     <Suspense fallback={<PaginatedProductsSkeleton />}>
-      <PaginatedProducts productsIds={productIds} page={1} order={order} />
+      <PaginatedProducts productsIds={productIds} page={page} order={order} />
     </Suspense>
   );
 }

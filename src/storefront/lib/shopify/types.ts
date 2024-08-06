@@ -396,13 +396,6 @@ export type ShopifyProductOperation = {
   };
 };
 
-export type ShopifyProductAvailabilityOperation = {
-  data: { product: Pick<ShopifyProduct, "availableForSale" | "variants" | "totalInventory" | "priceRange"> };
-  variables: {
-    handle: string;
-  };
-};
-
 export type ShopifyProductRecommendationsOperation = {
   data: {
     productRecommendations: { id: string }[];

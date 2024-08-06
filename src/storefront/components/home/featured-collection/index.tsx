@@ -1,6 +1,7 @@
 import {
   Collections,
   Link as LinkType,
+  PaginatedProductsQueryTemplateResult,
   Product,
   ShopifyProduct,
 } from "@/sanity.types";
@@ -16,7 +17,7 @@ export function FeaturedCollection({
   collection?: {
     title?: string;
     paragraph?: string;
-    products?: { _id: string; store?: ShopifyProduct | null }[] | null;
+    products?: PaginatedProductsQueryTemplateResult["products"] | null;
     picture?: Exclude<Collections["picture"], undefined> | null;
     link?: LinkType;
   } | null;

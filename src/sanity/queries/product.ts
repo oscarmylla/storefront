@@ -44,15 +44,25 @@ export const paginatedProductsQuery = ({ queryParams, page = 1 }: {
    const productIdsFilter = id ? `store.id in [${id.map(i => `${i}`).join(", ")}]` : "true";
    const pageFilter = `[${(page - 1) * limit}...${page * limit}]`
 
-   return `*[_type == "product" && store.status == "active" && ${categoryFilter} && ${typeFilter} && ${vendorFilter} && ${productIdsFilter}] | ${orderFilter} ${pageFilter}{
-      _id,
-      store
+   const documentFilter = `_type == "product" && store.status == "active" && ${categoryFilter} && ${typeFilter} && ${vendorFilter} && ${productIdsFilter}`
+
+   return `{
+      "products": *[${documentFilter}] | ${orderFilter} ${pageFilter}{
+         _id,
+         store,
+         "variant": store.variants[0]->.store
+      },
+      "count": count(*[${documentFilter}])
    }`
 };
 
-export const paginatedProductsQueryTemplate = groq`*[_type == "product"]{
-   _id,
-   store
+export const paginatedProductsQueryTemplate = groq`{
+   "products": *[_type == "product"]{
+      _id,
+      store,
+      "variant": store.variants[0]->.store
+   },
+   "count": count(*[_type == "product"])
 }`
 
 export const productByHandleQuery = groq`*[_type == "product" && store.slug.current == $handle][0]{

@@ -30,9 +30,11 @@ export default async function CategoryPage({
   params: { category: string[] };
   searchParams?: {
     order?: string;
+    page?: string;
   };
 }) {
   const order = searchParams?.order;
+  const page = parseInt(searchParams?.page ?? "1", 10);
 
   const categories = await getCategoriesByPath({
     slugs: params.category,
@@ -48,6 +50,7 @@ export default async function CategoryPage({
       category={category}
       categories={categories}
       order={order as SortOptions | undefined}
+      page={page}
     />
   );
 }

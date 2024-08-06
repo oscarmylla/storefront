@@ -63,7 +63,7 @@ export default async function SearchPage({
           </Link>
         )}
         <Suspense fallback={<PaginatedProductsSkeleton />}>
-          <PaginatedProducts productsIds={productIds} page={1} />
+          <PaginatedProducts productsIds={productIds} />
         </Suspense>
         {pageInfo.hasNextPage && (
           <Link

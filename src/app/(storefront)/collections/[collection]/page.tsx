@@ -29,9 +29,11 @@ export default async function CollectionPage({
   params: { collection: string };
   searchParams?: {
     order?: string;
+    page?: string;
   };
 }) {
   const order = searchParams?.order;
+  const page = parseInt(searchParams?.page || "1", 10);
 
   const collection = await getCollection(params.collection);
 
@@ -41,6 +43,7 @@ export default async function CollectionPage({
     <CollectionMain
       collection={collection}
       order={order as SortOptions | undefined}
+      page={page}
     />
   );
 }
